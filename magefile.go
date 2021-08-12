@@ -46,18 +46,13 @@ func generateInternal() error {
 		return err
 	}
 
-	err = buf.Run(
+	return buf.Run(
 		buf.AddArg("generate"),
 		buf.AddArg("--template"),
 		buf.AddArg(filepath.Join("buf", "buf.gen.yaml")),
 		buf.AddArg(bufImage),
 		buf.AddPaths(files),
 	)
-	if err != nil {
-		return err
-	}
-
-	return filepath.Walk("aserto", replacePackageName)
 }
 
 func getClientFiles() ([]string, error) {
@@ -102,40 +97,6 @@ func getClientFiles() ([]string, error) {
 	}
 
 	return clientFiles, nil
-}
-
-func replacePackageName(path string, fi os.FileInfo, err error) error {
-
-	if err != nil {
-		return err
-	}
-
-	if fi.IsDir() {
-		return nil
-	}
-
-	matched, err := filepath.Match("*.go", fi.Name())
-
-	if err != nil {
-		return err
-	}
-
-	if matched {
-		read, err := ioutil.ReadFile(path)
-		if err != nil {
-			return err
-		}
-
-		newContents := strings.Replace(string(read), "github.com/aserto-dev/proto/aserto", "github.com/aserto-dev/go-grpc/aserto", -1)
-
-		err = ioutil.WriteFile(path, []byte(newContents), 0)
-		if err != nil {
-			return err
-		}
-
-	}
-
-	return nil
 }
 
 // Probably not needed
