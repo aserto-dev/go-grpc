@@ -15,6 +15,19 @@ import (
 
 var bufImage = "buf.build/mitza/aserto"
 
+func All() error {
+	Deps()
+	err := Clean()
+	if err != nil {
+		return err
+	}
+	err = Generate()
+	if err != nil {
+		return err
+	}
+	return Build()
+}
+
 // install required dependencies.
 func Deps() {
 	deps.GetAllDeps()
@@ -74,7 +87,7 @@ func getClientFiles() ([]string, error) {
 	if err != nil {
 		return clientFiles, err
 	}
-	excludePattern := filepath.Join(bufExportDir, "aserto", "**", "*_internal.proto")
+	excludePattern := filepath.Join(bufExportDir, "aserto", "**", "private", "**", "*.proto")
 
 	protoFiles, err := fsutil.Glob(filepath.Join(bufExportDir, "aserto", "**", "*.proto"), excludePattern)
 	if err != nil {
@@ -97,6 +110,11 @@ func getClientFiles() ([]string, error) {
 	}
 
 	return clientFiles, nil
+}
+
+// Removes generated files
+func Clean() error {
+	return os.RemoveAll("aserto")
 }
 
 // Probably not needed
