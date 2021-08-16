@@ -33,13 +33,8 @@ func Deps() {
 	deps.GetAllDeps()
 }
 
-// Generate the code
+// Generate go code
 func Generate() error {
-	return generateInternal()
-}
-
-// Generate Internal services
-func generateInternal() error {
 
 	files, err := getClientFiles()
 	if err != nil {
@@ -87,26 +82,15 @@ func getClientFiles() ([]string, error) {
 	if err != nil {
 		return clientFiles, err
 	}
-	excludePattern := filepath.Join(bufExportDir, "aserto", "**", "private", "**", "*.proto")
+	excludePattern := filepath.Join(bufExportDir, "aserto", "authorizer", "authorizer", "**", "*.proto")
 
 	protoFiles, err := fsutil.Glob(filepath.Join(bufExportDir, "aserto", "**", "*.proto"), excludePattern)
 	if err != nil {
 		return clientFiles, err
 	}
 
-	authorizerFiles, err := fsutil.Glob(filepath.Join(bufExportDir, "aserto", "authorizer", "authorizer", "**", "*.proto"), excludePattern)
-	if err != nil {
-		return clientFiles, err
-	}
-
-	mapAuthorizerFiles := make(map[string]int, len(authorizerFiles))
-	for _, authorizerFile := range authorizerFiles {
-		mapAuthorizerFiles[authorizerFile] = 1
-	}
 	for _, protoFile := range protoFiles {
-		if _, found := mapAuthorizerFiles[protoFile]; !found {
-			clientFiles = append(clientFiles, strings.TrimPrefix(protoFile, bufExportDir+string(filepath.Separator)))
-		}
+		clientFiles = append(clientFiles, strings.TrimPrefix(protoFile, bufExportDir+string(filepath.Separator)))
 	}
 
 	return clientFiles, nil
