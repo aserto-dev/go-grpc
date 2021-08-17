@@ -244,7 +244,7 @@ func local_request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler run
 }
 
 func request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListTemplateRequest
+	var protoReq ListTemplatesRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -270,7 +270,7 @@ func request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtim
 }
 
 func local_request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListTemplateRequest
+	var protoReq ListTemplatesRequest
 	var metadata runtime.ServerMetadata
 
 	var (

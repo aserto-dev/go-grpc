@@ -13,7 +13,7 @@ import (
 	"github.com/aserto-dev/mage-loot/fsutil"
 )
 
-var bufImage = "buf.build/mitza/aserto"
+var bufImage = "buf.build/aserto-dev/aserto"
 
 func All() error {
 	Deps()
