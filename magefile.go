@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -52,6 +53,13 @@ func Generate() error {
 	err = os.Setenv("PATH", oldPath+string(os.PathListSeparator)+filepath.Dir(protocPath))
 	if err != nil {
 		return err
+	}
+
+	tag, err := buf.GetLatestTag(bufImage)
+	if err != nil {
+		fmt.Println("Could not retrieve tags, using latest")
+	} else {
+		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
 	}
 
 	return buf.Run(
