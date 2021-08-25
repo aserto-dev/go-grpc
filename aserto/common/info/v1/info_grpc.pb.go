@@ -19,7 +19,6 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InfoClient interface {
 	Info(ctx context.Context, in *InfoRequest, opts ...grpc.CallOption) (*InfoResponse, error)
-	Config(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error)
 }
 
 type infoClient struct {
@@ -39,21 +38,11 @@ func (c *infoClient) Info(ctx context.Context, in *InfoRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *infoClient) Config(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error) {
-	out := new(ConfigResponse)
-	err := c.cc.Invoke(ctx, "/aserto.common.info.v1.Info/Config", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // InfoServer is the server API for Info service.
 // All implementations should embed UnimplementedInfoServer
 // for forward compatibility
 type InfoServer interface {
 	Info(context.Context, *InfoRequest) (*InfoResponse, error)
-	Config(context.Context, *ConfigRequest) (*ConfigResponse, error)
 }
 
 // UnimplementedInfoServer should be embedded to have forward compatible implementations.
@@ -62,9 +51,6 @@ type UnimplementedInfoServer struct {
 
 func (UnimplementedInfoServer) Info(context.Context, *InfoRequest) (*InfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
-}
-func (UnimplementedInfoServer) Config(context.Context, *ConfigRequest) (*ConfigResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Config not implemented")
 }
 
 // UnsafeInfoServer may be embedded to opt out of forward compatibility for this service.
@@ -96,24 +82,6 @@ func _Info_Info_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Info_Config_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfigRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InfoServer).Config(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/aserto.common.info.v1.Info/Config",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).Config(ctx, req.(*ConfigRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Info_ServiceDesc is the grpc.ServiceDesc for Info service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -124,10 +92,6 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Info",
 			Handler:    _Info_Info_Handler,
-		},
-		{
-			MethodName: "Config",
-			Handler:    _Info_Config_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
