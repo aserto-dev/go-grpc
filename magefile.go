@@ -14,7 +14,10 @@ import (
 	"github.com/aserto-dev/mage-loot/fsutil"
 )
 
-var bufImage = "buf.build/aserto-dev/aserto"
+// var bufImage = "buf.build/aserto-dev/aserto"
+// var filesSource = bufImage
+var bufImage = "../proto/bin/aserto.bin#format=bin"
+var filesSource = "../proto/public#format=dir"
 
 func All() error {
 	Deps()
@@ -55,11 +58,13 @@ func Generate() error {
 		return err
 	}
 
-	tag, err := buf.GetLatestTag(bufImage)
-	if err != nil {
-		fmt.Println("Could not retrieve tags, using latest")
-	} else {
-		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
+	if !strings.HasSuffix(bufImage, "#format=bin") {
+		tag, err := buf.GetLatestTag(bufImage)
+		if err != nil {
+			fmt.Println("Could not retrieve tags, using latest")
+		} else {
+			bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
+		}
 	}
 
 	return buf.Run(
@@ -83,7 +88,7 @@ func getClientFiles() ([]string, error) {
 	defer os.RemoveAll(bufExportDir)
 	err = buf.Run(
 		buf.AddArg("export"),
-		buf.AddArg(bufImage),
+		buf.AddArg(filesSource),
 		buf.AddArg("-o"),
 		buf.AddArg(bufExportDir),
 	)
