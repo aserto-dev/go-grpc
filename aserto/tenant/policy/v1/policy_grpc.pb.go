@@ -21,6 +21,7 @@ type PolicyClient interface {
 	ListPolicyRefs(ctx context.Context, in *ListPolicyRefsRequest, opts ...grpc.CallOption) (*ListPolicyRefsResponse, error)
 	CreatePolicyRef(ctx context.Context, in *CreatePolicyRefRequest, opts ...grpc.CallOption) (*CreatePolicyRefResponse, error)
 	DeletePolicyRef(ctx context.Context, in *DeletePolicyRefRequest, opts ...grpc.CallOption) (*DeletePolicyRefResponse, error)
+	UpdatePolicyRef(ctx context.Context, in *UpdatePolicyRefRequest, opts ...grpc.CallOption) (*UpdatePolicyRefResponse, error)
 }
 
 type policyClient struct {
@@ -58,6 +59,15 @@ func (c *policyClient) DeletePolicyRef(ctx context.Context, in *DeletePolicyRefR
 	return out, nil
 }
 
+func (c *policyClient) UpdatePolicyRef(ctx context.Context, in *UpdatePolicyRefRequest, opts ...grpc.CallOption) (*UpdatePolicyRefResponse, error) {
+	out := new(UpdatePolicyRefResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.policy.v1.Policy/UpdatePolicyRef", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PolicyServer is the server API for Policy service.
 // All implementations should embed UnimplementedPolicyServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type PolicyServer interface {
 	ListPolicyRefs(context.Context, *ListPolicyRefsRequest) (*ListPolicyRefsResponse, error)
 	CreatePolicyRef(context.Context, *CreatePolicyRefRequest) (*CreatePolicyRefResponse, error)
 	DeletePolicyRef(context.Context, *DeletePolicyRefRequest) (*DeletePolicyRefResponse, error)
+	UpdatePolicyRef(context.Context, *UpdatePolicyRefRequest) (*UpdatePolicyRefResponse, error)
 }
 
 // UnimplementedPolicyServer should be embedded to have forward compatible implementations.
@@ -79,6 +90,9 @@ func (UnimplementedPolicyServer) CreatePolicyRef(context.Context, *CreatePolicyR
 }
 func (UnimplementedPolicyServer) DeletePolicyRef(context.Context, *DeletePolicyRefRequest) (*DeletePolicyRefResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePolicyRef not implemented")
+}
+func (UnimplementedPolicyServer) UpdatePolicyRef(context.Context, *UpdatePolicyRefRequest) (*UpdatePolicyRefResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePolicyRef not implemented")
 }
 
 // UnsafePolicyServer may be embedded to opt out of forward compatibility for this service.
@@ -146,6 +160,24 @@ func _Policy_DeletePolicyRef_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Policy_UpdatePolicyRef_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePolicyRefRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PolicyServer).UpdatePolicyRef(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.policy.v1.Policy/UpdatePolicyRef",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PolicyServer).UpdatePolicyRef(ctx, req.(*UpdatePolicyRefRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Policy_ServiceDesc is the grpc.ServiceDesc for Policy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,6 +196,10 @@ var Policy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePolicyRef",
 			Handler:    _Policy_DeletePolicyRef_Handler,
+		},
+		{
+			MethodName: "UpdatePolicyRef",
+			Handler:    _Policy_UpdatePolicyRef_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
