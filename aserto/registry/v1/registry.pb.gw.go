@@ -50,7 +50,7 @@ func local_request_Registry_ListImages_0(ctx context.Context, marshaler runtime.
 }
 
 var (
-	filter_Registry_RemoveImage_0 = &utilities.DoubleArray{Encoding: map[string]int{"image": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Registry_RemoveImage_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "image": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Registry_RemoveImage_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -63,6 +63,16 @@ func request_Registry_RemoveImage_0(ctx context.Context, marshaler runtime.Marsh
 		err error
 		_   = err
 	)
+
+	val, ok = pathParams["organization"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "organization")
+	}
+
+	protoReq.Organization, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "organization", err)
+	}
 
 	val, ok = pathParams["image"]
 	if !ok {
@@ -96,6 +106,16 @@ func local_request_Registry_RemoveImage_0(ctx context.Context, marshaler runtime
 		err error
 		_   = err
 	)
+
+	val, ok = pathParams["organization"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "organization")
+	}
+
+	protoReq.Organization, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "organization", err)
+	}
 
 	val, ok = pathParams["image"]
 	if !ok {
@@ -154,7 +174,7 @@ func RegisterRegistryHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry.v1.Registry/RemoveImage", runtime.WithHTTPPathPattern("/api/v1/registry/images/{image}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry.v1.Registry/RemoveImage", runtime.WithHTTPPathPattern("/api/v1/registry/images/{organization}/{image}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -236,7 +256,7 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry.v1.Registry/RemoveImage", runtime.WithHTTPPathPattern("/api/v1/registry/images/{image}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry.v1.Registry/RemoveImage", runtime.WithHTTPPathPattern("/api/v1/registry/images/{organization}/{image}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -258,7 +278,7 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 var (
 	pattern_Registry_ListImages_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "registry", "images"}, ""))
 
-	pattern_Registry_RemoveImage_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "registry", "images", "image"}, ""))
+	pattern_Registry_RemoveImage_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"api", "v1", "registry", "images", "organization", "image"}, ""))
 )
 
 var (
