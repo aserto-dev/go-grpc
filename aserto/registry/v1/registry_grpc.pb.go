@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RegistryClient interface {
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	RemoveImage(ctx context.Context, in *RemoveImageRequest, opts ...grpc.CallOption) (*RemoveImageResponse, error)
+	SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error)
 }
 
 type registryClient struct {
@@ -48,12 +49,22 @@ func (c *registryClient) RemoveImage(ctx context.Context, in *RemoveImageRequest
 	return out, nil
 }
 
+func (c *registryClient) SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error) {
+	out := new(SetImageVisibilityResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/SetImageVisibility", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
 type RegistryServer interface {
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
 	RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error)
+	SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -65,6 +76,9 @@ func (UnimplementedRegistryServer) ListImages(context.Context, *ListImagesReques
 }
 func (UnimplementedRegistryServer) RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveImage not implemented")
+}
+func (UnimplementedRegistryServer) SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetImageVisibility not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -114,6 +128,24 @@ func _Registry_RemoveImage_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_SetImageVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetImageVisibilityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).SetImageVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/SetImageVisibility",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).SetImageVisibility(ctx, req.(*SetImageVisibilityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -128,6 +160,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveImage",
 			Handler:    _Registry_RemoveImage_Handler,
+		},
+		{
+			MethodName: "SetImageVisibility",
+			Handler:    _Registry_SetImageVisibility_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
