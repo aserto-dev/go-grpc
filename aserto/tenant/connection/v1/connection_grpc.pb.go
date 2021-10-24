@@ -24,7 +24,7 @@ type ConnectionClient interface {
 	UpdateConnection(ctx context.Context, in *UpdateConnectionRequest, opts ...grpc.CallOption) (*UpdateConnectionResponse, error)
 	DeleteConnection(ctx context.Context, in *DeleteConnectionRequest, opts ...grpc.CallOption) (*DeleteConnectionResponse, error)
 	VerifyConnection(ctx context.Context, in *VerifyConnectionRequest, opts ...grpc.CallOption) (*VerifyConnectionResponse, error)
-	RotateConnectionConfigValue(ctx context.Context, in *RotateConnectionConfigValueRequest, opts ...grpc.CallOption) (*RotateConnectionConfigValueResponse, error)
+	RotateSecret(ctx context.Context, in *RotateSecretRequest, opts ...grpc.CallOption) (*RotateSecretResponse, error)
 }
 
 type connectionClient struct {
@@ -89,9 +89,9 @@ func (c *connectionClient) VerifyConnection(ctx context.Context, in *VerifyConne
 	return out, nil
 }
 
-func (c *connectionClient) RotateConnectionConfigValue(ctx context.Context, in *RotateConnectionConfigValueRequest, opts ...grpc.CallOption) (*RotateConnectionConfigValueResponse, error) {
-	out := new(RotateConnectionConfigValueResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.connection.v1.Connection/RotateConnectionConfigValue", in, out, opts...)
+func (c *connectionClient) RotateSecret(ctx context.Context, in *RotateSecretRequest, opts ...grpc.CallOption) (*RotateSecretResponse, error) {
+	out := new(RotateSecretResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.connection.v1.Connection/RotateSecret", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ type ConnectionServer interface {
 	UpdateConnection(context.Context, *UpdateConnectionRequest) (*UpdateConnectionResponse, error)
 	DeleteConnection(context.Context, *DeleteConnectionRequest) (*DeleteConnectionResponse, error)
 	VerifyConnection(context.Context, *VerifyConnectionRequest) (*VerifyConnectionResponse, error)
-	RotateConnectionConfigValue(context.Context, *RotateConnectionConfigValueRequest) (*RotateConnectionConfigValueResponse, error)
+	RotateSecret(context.Context, *RotateSecretRequest) (*RotateSecretResponse, error)
 }
 
 // UnimplementedConnectionServer should be embedded to have forward compatible implementations.
@@ -133,8 +133,8 @@ func (UnimplementedConnectionServer) DeleteConnection(context.Context, *DeleteCo
 func (UnimplementedConnectionServer) VerifyConnection(context.Context, *VerifyConnectionRequest) (*VerifyConnectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyConnection not implemented")
 }
-func (UnimplementedConnectionServer) RotateConnectionConfigValue(context.Context, *RotateConnectionConfigValueRequest) (*RotateConnectionConfigValueResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RotateConnectionConfigValue not implemented")
+func (UnimplementedConnectionServer) RotateSecret(context.Context, *RotateSecretRequest) (*RotateSecretResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RotateSecret not implemented")
 }
 
 // UnsafeConnectionServer may be embedded to opt out of forward compatibility for this service.
@@ -256,20 +256,20 @@ func _Connection_VerifyConnection_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Connection_RotateConnectionConfigValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RotateConnectionConfigValueRequest)
+func _Connection_RotateSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RotateSecretRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConnectionServer).RotateConnectionConfigValue(ctx, in)
+		return srv.(ConnectionServer).RotateSecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/aserto.tenant.connection.v1.Connection/RotateConnectionConfigValue",
+		FullMethod: "/aserto.tenant.connection.v1.Connection/RotateSecret",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConnectionServer).RotateConnectionConfigValue(ctx, req.(*RotateConnectionConfigValueRequest))
+		return srv.(ConnectionServer).RotateSecret(ctx, req.(*RotateSecretRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -306,8 +306,8 @@ var Connection_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Connection_VerifyConnection_Handler,
 		},
 		{
-			MethodName: "RotateConnectionConfigValue",
-			Handler:    _Connection_RotateConnectionConfigValue_Handler,
+			MethodName: "RotateSecret",
+			Handler:    _Connection_RotateSecret_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

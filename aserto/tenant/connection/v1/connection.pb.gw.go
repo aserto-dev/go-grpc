@@ -343,8 +343,8 @@ func local_request_Connection_VerifyConnection_0(ctx context.Context, marshaler 
 
 }
 
-func request_Connection_RotateConnectionConfigValue_0(ctx context.Context, marshaler runtime.Marshaler, client ConnectionClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq RotateConnectionConfigValueRequest
+func request_Connection_RotateSecret_0(ctx context.Context, marshaler runtime.Marshaler, client ConnectionClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq RotateSecretRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -364,23 +364,23 @@ func request_Connection_RotateConnectionConfigValue_0(ctx context.Context, marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	val, ok = pathParams["config_key"]
+	val, ok = pathParams["secret_key"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "config_key")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "secret_key")
 	}
 
-	protoReq.ConfigKey, err = runtime.String(val)
+	protoReq.SecretKey, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "config_key", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "secret_key", err)
 	}
 
-	msg, err := client.RotateConnectionConfigValue(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.RotateSecret(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Connection_RotateConnectionConfigValue_0(ctx context.Context, marshaler runtime.Marshaler, server ConnectionServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq RotateConnectionConfigValueRequest
+func local_request_Connection_RotateSecret_0(ctx context.Context, marshaler runtime.Marshaler, server ConnectionServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq RotateSecretRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -400,17 +400,17 @@ func local_request_Connection_RotateConnectionConfigValue_0(ctx context.Context,
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	val, ok = pathParams["config_key"]
+	val, ok = pathParams["secret_key"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "config_key")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "secret_key")
 	}
 
-	protoReq.ConfigKey, err = runtime.String(val)
+	protoReq.SecretKey, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "config_key", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "secret_key", err)
 	}
 
-	msg, err := server.RotateConnectionConfigValue(ctx, &protoReq)
+	msg, err := server.RotateSecret(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -559,18 +559,18 @@ func RegisterConnectionHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("PUT", pattern_Connection_RotateConnectionConfigValue_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_Connection_RotateSecret_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.connection.v1.Connection/RotateConnectionConfigValue", runtime.WithHTTPPathPattern("/api/v1/tenant/connections/{id}/{config_key}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.connection.v1.Connection/RotateSecret", runtime.WithHTTPPathPattern("/api/v1/tenant/connections/{id}/{secret_key}/rotate"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Connection_RotateConnectionConfigValue_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Connection_RotateSecret_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -578,7 +578,7 @@ func RegisterConnectionHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			return
 		}
 
-		forward_Connection_RotateConnectionConfigValue_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Connection_RotateSecret_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -743,23 +743,23 @@ func RegisterConnectionHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("PUT", pattern_Connection_RotateConnectionConfigValue_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_Connection_RotateSecret_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.connection.v1.Connection/RotateConnectionConfigValue", runtime.WithHTTPPathPattern("/api/v1/tenant/connections/{id}/{config_key}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.connection.v1.Connection/RotateSecret", runtime.WithHTTPPathPattern("/api/v1/tenant/connections/{id}/{secret_key}/rotate"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Connection_RotateConnectionConfigValue_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Connection_RotateSecret_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Connection_RotateConnectionConfigValue_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Connection_RotateSecret_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -779,7 +779,7 @@ var (
 
 	pattern_Connection_VerifyConnection_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "connections", "id", "verify"}, ""))
 
-	pattern_Connection_RotateConnectionConfigValue_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"api", "v1", "tenant", "connections", "id", "config_key"}, ""))
+	pattern_Connection_RotateSecret_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 2, 6}, []string{"api", "v1", "tenant", "connections", "id", "secret_key", "rotate"}, ""))
 )
 
 var (
@@ -795,5 +795,5 @@ var (
 
 	forward_Connection_VerifyConnection_0 = runtime.ForwardResponseMessage
 
-	forward_Connection_RotateConnectionConfigValue_0 = runtime.ForwardResponseMessage
+	forward_Connection_RotateSecret_0 = runtime.ForwardResponseMessage
 )
