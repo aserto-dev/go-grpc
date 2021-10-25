@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RegistryClient interface {
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	RemoveImage(ctx context.Context, in *RemoveImageRequest, opts ...grpc.CallOption) (*RemoveImageResponse, error)
+	CreateImage(ctx context.Context, in *CreateImageRequest, opts ...grpc.CallOption) (*CreateImageResponse, error)
 	SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error)
 }
 
@@ -49,6 +50,15 @@ func (c *registryClient) RemoveImage(ctx context.Context, in *RemoveImageRequest
 	return out, nil
 }
 
+func (c *registryClient) CreateImage(ctx context.Context, in *CreateImageRequest, opts ...grpc.CallOption) (*CreateImageResponse, error) {
+	out := new(CreateImageResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/CreateImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *registryClient) SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error) {
 	out := new(SetImageVisibilityResponse)
 	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/SetImageVisibility", in, out, opts...)
@@ -64,6 +74,7 @@ func (c *registryClient) SetImageVisibility(ctx context.Context, in *SetImageVis
 type RegistryServer interface {
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
 	RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error)
+	CreateImage(context.Context, *CreateImageRequest) (*CreateImageResponse, error)
 	SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error)
 }
 
@@ -76,6 +87,9 @@ func (UnimplementedRegistryServer) ListImages(context.Context, *ListImagesReques
 }
 func (UnimplementedRegistryServer) RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveImage not implemented")
+}
+func (UnimplementedRegistryServer) CreateImage(context.Context, *CreateImageRequest) (*CreateImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateImage not implemented")
 }
 func (UnimplementedRegistryServer) SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetImageVisibility not implemented")
@@ -128,6 +142,24 @@ func _Registry_RemoveImage_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_CreateImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).CreateImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/CreateImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).CreateImage(ctx, req.(*CreateImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Registry_SetImageVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetImageVisibilityRequest)
 	if err := dec(in); err != nil {
@@ -160,6 +192,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveImage",
 			Handler:    _Registry_RemoveImage_Handler,
+		},
+		{
+			MethodName: "CreateImage",
+			Handler:    _Registry_CreateImage_Handler,
 		},
 		{
 			MethodName: "SetImageVisibility",
