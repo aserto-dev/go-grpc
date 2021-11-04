@@ -22,6 +22,8 @@ type RegistryClient interface {
 	RemoveImage(ctx context.Context, in *RemoveImageRequest, opts ...grpc.CallOption) (*RemoveImageResponse, error)
 	CreateImage(ctx context.Context, in *CreateImageRequest, opts ...grpc.CallOption) (*CreateImageResponse, error)
 	SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error)
+	GetReadAccessToken(ctx context.Context, in *GetReadAccessTokenRequest, opts ...grpc.CallOption) (*GetReadAccessTokenResponse, error)
+	GetWriteAccessToken(ctx context.Context, in *GetWriteAccessTokenRequest, opts ...grpc.CallOption) (*GetWriteAccessTokenResponse, error)
 }
 
 type registryClient struct {
@@ -68,6 +70,24 @@ func (c *registryClient) SetImageVisibility(ctx context.Context, in *SetImageVis
 	return out, nil
 }
 
+func (c *registryClient) GetReadAccessToken(ctx context.Context, in *GetReadAccessTokenRequest, opts ...grpc.CallOption) (*GetReadAccessTokenResponse, error) {
+	out := new(GetReadAccessTokenResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/GetReadAccessToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *registryClient) GetWriteAccessToken(ctx context.Context, in *GetWriteAccessTokenRequest, opts ...grpc.CallOption) (*GetWriteAccessTokenResponse, error) {
+	out := new(GetWriteAccessTokenResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/GetWriteAccessToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
@@ -76,6 +96,8 @@ type RegistryServer interface {
 	RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error)
 	CreateImage(context.Context, *CreateImageRequest) (*CreateImageResponse, error)
 	SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error)
+	GetReadAccessToken(context.Context, *GetReadAccessTokenRequest) (*GetReadAccessTokenResponse, error)
+	GetWriteAccessToken(context.Context, *GetWriteAccessTokenRequest) (*GetWriteAccessTokenResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -93,6 +115,12 @@ func (UnimplementedRegistryServer) CreateImage(context.Context, *CreateImageRequ
 }
 func (UnimplementedRegistryServer) SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetImageVisibility not implemented")
+}
+func (UnimplementedRegistryServer) GetReadAccessToken(context.Context, *GetReadAccessTokenRequest) (*GetReadAccessTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReadAccessToken not implemented")
+}
+func (UnimplementedRegistryServer) GetWriteAccessToken(context.Context, *GetWriteAccessTokenRequest) (*GetWriteAccessTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWriteAccessToken not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -178,6 +206,42 @@ func _Registry_SetImageVisibility_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_GetReadAccessToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetReadAccessTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).GetReadAccessToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/GetReadAccessToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).GetReadAccessToken(ctx, req.(*GetReadAccessTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Registry_GetWriteAccessToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWriteAccessTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).GetWriteAccessToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/GetWriteAccessToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).GetWriteAccessToken(ctx, req.(*GetWriteAccessTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -200,6 +264,14 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetImageVisibility",
 			Handler:    _Registry_SetImageVisibility_Handler,
+		},
+		{
+			MethodName: "GetReadAccessToken",
+			Handler:    _Registry_GetReadAccessToken_Handler,
+		},
+		{
+			MethodName: "GetWriteAccessToken",
+			Handler:    _Registry_GetWriteAccessToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
