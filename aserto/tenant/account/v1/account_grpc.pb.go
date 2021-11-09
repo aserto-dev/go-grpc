@@ -21,6 +21,7 @@ type AccountClient interface {
 	GetAccount(ctx context.Context, in *GetAccountRequest, opts ...grpc.CallOption) (*GetAccountResponse, error)
 	ListInvites(ctx context.Context, in *ListInvitesRequest, opts ...grpc.CallOption) (*ListInvitesResponse, error)
 	UpdateAccount(ctx context.Context, in *UpdateAccountRequest, opts ...grpc.CallOption) (*UpdateAccountResponse, error)
+	SignupAccount(ctx context.Context, in *SignupAccountRequest, opts ...grpc.CallOption) (*SignupAccountResponse, error)
 }
 
 type accountClient struct {
@@ -58,6 +59,15 @@ func (c *accountClient) UpdateAccount(ctx context.Context, in *UpdateAccountRequ
 	return out, nil
 }
 
+func (c *accountClient) SignupAccount(ctx context.Context, in *SignupAccountRequest, opts ...grpc.CallOption) (*SignupAccountResponse, error) {
+	out := new(SignupAccountResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.account.v1.Account/SignupAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServer is the server API for Account service.
 // All implementations should embed UnimplementedAccountServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type AccountServer interface {
 	GetAccount(context.Context, *GetAccountRequest) (*GetAccountResponse, error)
 	ListInvites(context.Context, *ListInvitesRequest) (*ListInvitesResponse, error)
 	UpdateAccount(context.Context, *UpdateAccountRequest) (*UpdateAccountResponse, error)
+	SignupAccount(context.Context, *SignupAccountRequest) (*SignupAccountResponse, error)
 }
 
 // UnimplementedAccountServer should be embedded to have forward compatible implementations.
@@ -79,6 +90,9 @@ func (UnimplementedAccountServer) ListInvites(context.Context, *ListInvitesReque
 }
 func (UnimplementedAccountServer) UpdateAccount(context.Context, *UpdateAccountRequest) (*UpdateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAccount not implemented")
+}
+func (UnimplementedAccountServer) SignupAccount(context.Context, *SignupAccountRequest) (*SignupAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignupAccount not implemented")
 }
 
 // UnsafeAccountServer may be embedded to opt out of forward compatibility for this service.
@@ -146,6 +160,24 @@ func _Account_UpdateAccount_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Account_SignupAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignupAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServer).SignupAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.account.v1.Account/SignupAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServer).SignupAccount(ctx, req.(*SignupAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Account_ServiceDesc is the grpc.ServiceDesc for Account service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,6 +196,10 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAccount",
 			Handler:    _Account_UpdateAccount_Handler,
+		},
+		{
+			MethodName: "SignupAccount",
+			Handler:    _Account_SignupAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

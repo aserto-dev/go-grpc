@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -14,7 +13,7 @@ import (
 	"github.com/aserto-dev/mage-loot/fsutil"
 )
 
-var bufImage = "buf.build/aserto-dev/aserto"
+var bufImage = "buf.build/mitza/aserto"
 
 func All() error {
 	Deps()
@@ -55,12 +54,12 @@ func Generate() error {
 		return err
 	}
 
-	tag, err := buf.GetLatestTag(bufImage)
-	if err != nil {
-		fmt.Println("Could not retrieve tags, using latest")
-	} else {
-		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
-	}
+	// tag, err := buf.GetLatestTag(bufImage)
+	// if err != nil {
+	// 	fmt.Println("Could not retrieve tags, using latest")
+	// } else {
+	// 	bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
+	// }
 
 	return buf.Run(
 		buf.AddArg("generate"),
