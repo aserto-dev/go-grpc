@@ -18,6 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RegistryClient interface {
+	ListPublicOrgs(ctx context.Context, in *ListPublicOrgsRequest, opts ...grpc.CallOption) (*ListPublicOrgsResponse, error)
+	ListPublicImages(ctx context.Context, in *ListPublicImagesRequest, opts ...grpc.CallOption) (*ListPublicImagesResponse, error)
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	RemoveImage(ctx context.Context, in *RemoveImageRequest, opts ...grpc.CallOption) (*RemoveImageResponse, error)
 	CreateImage(ctx context.Context, in *CreateImageRequest, opts ...grpc.CallOption) (*CreateImageResponse, error)
@@ -32,6 +34,24 @@ type registryClient struct {
 
 func NewRegistryClient(cc grpc.ClientConnInterface) RegistryClient {
 	return &registryClient{cc}
+}
+
+func (c *registryClient) ListPublicOrgs(ctx context.Context, in *ListPublicOrgsRequest, opts ...grpc.CallOption) (*ListPublicOrgsResponse, error) {
+	out := new(ListPublicOrgsResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListPublicOrgs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *registryClient) ListPublicImages(ctx context.Context, in *ListPublicImagesRequest, opts ...grpc.CallOption) (*ListPublicImagesResponse, error) {
+	out := new(ListPublicImagesResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListPublicImages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *registryClient) ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error) {
@@ -92,6 +112,8 @@ func (c *registryClient) GetWriteAccessToken(ctx context.Context, in *GetWriteAc
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
 type RegistryServer interface {
+	ListPublicOrgs(context.Context, *ListPublicOrgsRequest) (*ListPublicOrgsResponse, error)
+	ListPublicImages(context.Context, *ListPublicImagesRequest) (*ListPublicImagesResponse, error)
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
 	RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error)
 	CreateImage(context.Context, *CreateImageRequest) (*CreateImageResponse, error)
@@ -104,6 +126,12 @@ type RegistryServer interface {
 type UnimplementedRegistryServer struct {
 }
 
+func (UnimplementedRegistryServer) ListPublicOrgs(context.Context, *ListPublicOrgsRequest) (*ListPublicOrgsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPublicOrgs not implemented")
+}
+func (UnimplementedRegistryServer) ListPublicImages(context.Context, *ListPublicImagesRequest) (*ListPublicImagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPublicImages not implemented")
+}
 func (UnimplementedRegistryServer) ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListImages not implemented")
 }
@@ -132,6 +160,42 @@ type UnsafeRegistryServer interface {
 
 func RegisterRegistryServer(s grpc.ServiceRegistrar, srv RegistryServer) {
 	s.RegisterService(&Registry_ServiceDesc, srv)
+}
+
+func _Registry_ListPublicOrgs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPublicOrgsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListPublicOrgs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/ListPublicOrgs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListPublicOrgs(ctx, req.(*ListPublicOrgsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Registry_ListPublicImages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPublicImagesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListPublicImages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/ListPublicImages",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListPublicImages(ctx, req.(*ListPublicImagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Registry_ListImages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -249,6 +313,14 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "aserto.registry.v1.Registry",
 	HandlerType: (*RegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListPublicOrgs",
+			Handler:    _Registry_ListPublicOrgs_Handler,
+		},
+		{
+			MethodName: "ListPublicImages",
+			Handler:    _Registry_ListPublicImages_Handler,
+		},
 		{
 			MethodName: "ListImages",
 			Handler:    _Registry_ListImages_Handler,
