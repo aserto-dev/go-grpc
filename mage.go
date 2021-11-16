@@ -8,4 +8,6 @@ import (
 	"github.com/magefile/mage/mage"
 )
 
-func main() { os.Exit(mage.Main()) }
+func main() {
+	os.Exit(mage.Main())
+}

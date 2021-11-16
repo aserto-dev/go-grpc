@@ -12,9 +12,8 @@ import (
 	"github.com/aserto-dev/mage-loot/buf"
 	"github.com/aserto-dev/mage-loot/deps"
 	"github.com/aserto-dev/mage-loot/fsutil"
+	"github.com/aserto-dev/mage-loot/mage"
 )
-
-var bufImage = "buf.build/aserto-dev/aserto"
 
 func All() error {
 	Deps()
@@ -22,11 +21,7 @@ func All() error {
 	if err != nil {
 		return err
 	}
-	err = Generate()
-	if err != nil {
-		return err
-	}
-	return Build()
+	return Generate()
 }
 
 // install required dependencies.
@@ -36,8 +31,47 @@ func Deps() {
 
 // Generate go code
 func Generate() error {
+	bufImage := "buf.build/aserto-dev/aserto"
 
-	files, err := getClientFiles()
+	tag, err := buf.GetLatestTag(bufImage)
+	if err != nil {
+		fmt.Println("Could not retrieve tags, using latest")
+	} else {
+		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
+	}
+
+	return gen(bufImage, bufImage)
+}
+
+// Generates from a dev build.
+func GenerateDev() error {
+	err := BuildDev()
+	if err != nil {
+		return err
+	}
+
+	bufImage := filepath.Join(getProtoRepo(), "bin", "aserto.bin#format=bin")
+	fileSources := filepath.Join(getProtoRepo(), "public#format=dir")
+
+	return gen(bufImage, fileSources)
+}
+
+// Builds the aserto proto image
+func BuildDev() error {
+	return mage.RunDir(getProtoRepo(), mage.AddArg("build"))
+}
+
+func getProtoRepo() string {
+	protoRepo := os.Getenv("PROTO_REPO")
+	if protoRepo == "" {
+		protoRepo = "../proto"
+	}
+	return protoRepo
+}
+
+func gen(bufImage, fileSources string) error {
+
+	files, err := getClientFiles(fileSources)
 	if err != nil {
 		return err
 	}
@@ -55,13 +89,6 @@ func Generate() error {
 		return err
 	}
 
-	tag, err := buf.GetLatestTag(bufImage)
-	if err != nil {
-		fmt.Println("Could not retrieve tags, using latest")
-	} else {
-		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
-	}
-
 	return buf.Run(
 		buf.AddArg("generate"),
 		buf.AddArg("--template"),
@@ -71,7 +98,7 @@ func Generate() error {
 	)
 }
 
-func getClientFiles() ([]string, error) {
+func getClientFiles(fileSources string) ([]string, error) {
 	var clientFiles []string
 
 	bufExportDir, err := ioutil.TempDir("", "bufimage")
@@ -83,7 +110,7 @@ func getClientFiles() ([]string, error) {
 	defer os.RemoveAll(bufExportDir)
 	err = buf.Run(
 		buf.AddArg("export"),
-		buf.AddArg(bufImage),
+		buf.AddArg(fileSources),
 		buf.AddArg("-o"),
 		buf.AddArg(bufExportDir),
 	)
@@ -107,9 +134,4 @@ func getClientFiles() ([]string, error) {
 // Removes generated files
 func Clean() error {
 	return os.RemoveAll("aserto")
-}
-
-// Probably not needed
-func Build() error {
-	return nil
 }
