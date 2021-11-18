@@ -21,6 +21,7 @@ type RegistryClient interface {
 	ListPublicOrgs(ctx context.Context, in *ListPublicOrgsRequest, opts ...grpc.CallOption) (*ListPublicOrgsResponse, error)
 	ListPublicImages(ctx context.Context, in *ListPublicImagesRequest, opts ...grpc.CallOption) (*ListPublicImagesResponse, error)
 	ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error)
+	ListOrgs(ctx context.Context, in *ListOrgsRequest, opts ...grpc.CallOption) (*ListOrgsResponse, error)
 	RemoveImage(ctx context.Context, in *RemoveImageRequest, opts ...grpc.CallOption) (*RemoveImageResponse, error)
 	CreateImage(ctx context.Context, in *CreateImageRequest, opts ...grpc.CallOption) (*CreateImageResponse, error)
 	SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error)
@@ -57,6 +58,15 @@ func (c *registryClient) ListPublicImages(ctx context.Context, in *ListPublicIma
 func (c *registryClient) ListImages(ctx context.Context, in *ListImagesRequest, opts ...grpc.CallOption) (*ListImagesResponse, error) {
 	out := new(ListImagesResponse)
 	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListImages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *registryClient) ListOrgs(ctx context.Context, in *ListOrgsRequest, opts ...grpc.CallOption) (*ListOrgsResponse, error) {
+	out := new(ListOrgsResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListOrgs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,6 +125,7 @@ type RegistryServer interface {
 	ListPublicOrgs(context.Context, *ListPublicOrgsRequest) (*ListPublicOrgsResponse, error)
 	ListPublicImages(context.Context, *ListPublicImagesRequest) (*ListPublicImagesResponse, error)
 	ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error)
+	ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error)
 	RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error)
 	CreateImage(context.Context, *CreateImageRequest) (*CreateImageResponse, error)
 	SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error)
@@ -134,6 +145,9 @@ func (UnimplementedRegistryServer) ListPublicImages(context.Context, *ListPublic
 }
 func (UnimplementedRegistryServer) ListImages(context.Context, *ListImagesRequest) (*ListImagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListImages not implemented")
+}
+func (UnimplementedRegistryServer) ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOrgs not implemented")
 }
 func (UnimplementedRegistryServer) RemoveImage(context.Context, *RemoveImageRequest) (*RemoveImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveImage not implemented")
@@ -212,6 +226,24 @@ func _Registry_ListImages_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RegistryServer).ListImages(ctx, req.(*ListImagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Registry_ListOrgs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOrgsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListOrgs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/ListOrgs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListOrgs(ctx, req.(*ListOrgsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -324,6 +356,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListImages",
 			Handler:    _Registry_ListImages_Handler,
+		},
+		{
+			MethodName: "ListOrgs",
+			Handler:    _Registry_ListOrgs_Handler,
 		},
 		{
 			MethodName: "RemoveImage",
