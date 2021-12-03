@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type PolicyClient interface {
 	GetPolicyImage(ctx context.Context, in *GetPolicyImageRequest, opts ...grpc.CallOption) (*GetPolicyImageResponse, error)
 	ListPolicyImages(ctx context.Context, in *ListPolicyImagesRequest, opts ...grpc.CallOption) (*ListPolicyImagesResponse, error)
+	ListPublicPolicyImages(ctx context.Context, in *ListPublicPolicyImagesRequest, opts ...grpc.CallOption) (*ListPublicPolicyImagesResponse, error)
 	CreatePolicyImage(ctx context.Context, in *CreatePolicyImageRequest, opts ...grpc.CallOption) (*CreatePolicyImageResponse, error)
 	DeletePolicyImage(ctx context.Context, in *DeletePolicyImageRequest, opts ...grpc.CallOption) (*DeletePolicyImageResponse, error)
 	UpdatePolicyImage(ctx context.Context, in *UpdatePolicyImageRequest, opts ...grpc.CallOption) (*UpdatePolicyImageResponse, error)
@@ -45,6 +46,15 @@ func (c *policyClient) GetPolicyImage(ctx context.Context, in *GetPolicyImageReq
 func (c *policyClient) ListPolicyImages(ctx context.Context, in *ListPolicyImagesRequest, opts ...grpc.CallOption) (*ListPolicyImagesResponse, error) {
 	out := new(ListPolicyImagesResponse)
 	err := c.cc.Invoke(ctx, "/aserto.registry_tenant.v1.Policy/ListPolicyImages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *policyClient) ListPublicPolicyImages(ctx context.Context, in *ListPublicPolicyImagesRequest, opts ...grpc.CallOption) (*ListPublicPolicyImagesResponse, error) {
+	out := new(ListPublicPolicyImagesResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry_tenant.v1.Policy/ListPublicPolicyImages", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,6 +94,7 @@ func (c *policyClient) UpdatePolicyImage(ctx context.Context, in *UpdatePolicyIm
 type PolicyServer interface {
 	GetPolicyImage(context.Context, *GetPolicyImageRequest) (*GetPolicyImageResponse, error)
 	ListPolicyImages(context.Context, *ListPolicyImagesRequest) (*ListPolicyImagesResponse, error)
+	ListPublicPolicyImages(context.Context, *ListPublicPolicyImagesRequest) (*ListPublicPolicyImagesResponse, error)
 	CreatePolicyImage(context.Context, *CreatePolicyImageRequest) (*CreatePolicyImageResponse, error)
 	DeletePolicyImage(context.Context, *DeletePolicyImageRequest) (*DeletePolicyImageResponse, error)
 	UpdatePolicyImage(context.Context, *UpdatePolicyImageRequest) (*UpdatePolicyImageResponse, error)
@@ -98,6 +109,9 @@ func (UnimplementedPolicyServer) GetPolicyImage(context.Context, *GetPolicyImage
 }
 func (UnimplementedPolicyServer) ListPolicyImages(context.Context, *ListPolicyImagesRequest) (*ListPolicyImagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPolicyImages not implemented")
+}
+func (UnimplementedPolicyServer) ListPublicPolicyImages(context.Context, *ListPublicPolicyImagesRequest) (*ListPublicPolicyImagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPublicPolicyImages not implemented")
 }
 func (UnimplementedPolicyServer) CreatePolicyImage(context.Context, *CreatePolicyImageRequest) (*CreatePolicyImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicyImage not implemented")
@@ -152,6 +166,24 @@ func _Policy_ListPolicyImages_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PolicyServer).ListPolicyImages(ctx, req.(*ListPolicyImagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Policy_ListPublicPolicyImages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPublicPolicyImagesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PolicyServer).ListPublicPolicyImages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry_tenant.v1.Policy/ListPublicPolicyImages",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PolicyServer).ListPublicPolicyImages(ctx, req.(*ListPublicPolicyImagesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -224,6 +256,10 @@ var Policy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListPolicyImages",
 			Handler:    _Policy_ListPolicyImages_Handler,
+		},
+		{
+			MethodName: "ListPublicPolicyImages",
+			Handler:    _Policy_ListPublicPolicyImages_Handler,
 		},
 		{
 			MethodName: "CreatePolicyImage",
