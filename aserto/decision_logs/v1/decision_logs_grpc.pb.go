@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 type DecisionLogsClient interface {
 	ListDecisionLogs(ctx context.Context, in *ListDecisionLogsRequest, opts ...grpc.CallOption) (*ListDecisionLogsResponse, error)
 	GetDecisionLog(ctx context.Context, in *GetDecisionLogRequest, opts ...grpc.CallOption) (*GetDecisionLogResponse, error)
+	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 }
 
 type decisionLogsClient struct {
@@ -48,12 +50,32 @@ func (c *decisionLogsClient) GetDecisionLog(ctx context.Context, in *GetDecision
 	return out, nil
 }
 
+func (c *decisionLogsClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error) {
+	out := new(ListUsersResponse)
+	err := c.cc.Invoke(ctx, "/aserto.decision_logs.v1.DecisionLogs/ListUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *decisionLogsClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, "/aserto.decision_logs.v1.DecisionLogs/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DecisionLogsServer is the server API for DecisionLogs service.
 // All implementations should embed UnimplementedDecisionLogsServer
 // for forward compatibility
 type DecisionLogsServer interface {
 	ListDecisionLogs(context.Context, *ListDecisionLogsRequest) (*ListDecisionLogsResponse, error)
 	GetDecisionLog(context.Context, *GetDecisionLogRequest) (*GetDecisionLogResponse, error)
+	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 }
 
 // UnimplementedDecisionLogsServer should be embedded to have forward compatible implementations.
@@ -65,6 +87,12 @@ func (UnimplementedDecisionLogsServer) ListDecisionLogs(context.Context, *ListDe
 }
 func (UnimplementedDecisionLogsServer) GetDecisionLog(context.Context, *GetDecisionLogRequest) (*GetDecisionLogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDecisionLog not implemented")
+}
+func (UnimplementedDecisionLogsServer) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
+func (UnimplementedDecisionLogsServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 
 // UnsafeDecisionLogsServer may be embedded to opt out of forward compatibility for this service.
@@ -114,6 +142,42 @@ func _DecisionLogs_GetDecisionLog_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DecisionLogs_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DecisionLogsServer).ListUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.decision_logs.v1.DecisionLogs/ListUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DecisionLogsServer).ListUsers(ctx, req.(*ListUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DecisionLogs_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DecisionLogsServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.decision_logs.v1.DecisionLogs/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DecisionLogsServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DecisionLogs_ServiceDesc is the grpc.ServiceDesc for DecisionLogs service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -128,6 +192,14 @@ var DecisionLogs_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDecisionLog",
 			Handler:    _DecisionLogs_GetDecisionLog_Handler,
+		},
+		{
+			MethodName: "ListUsers",
+			Handler:    _DecisionLogs_ListUsers_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _DecisionLogs_GetUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
