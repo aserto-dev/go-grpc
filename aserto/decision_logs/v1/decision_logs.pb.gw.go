@@ -207,6 +207,40 @@ func local_request_DecisionLogs_GetUser_0(ctx context.Context, marshaler runtime
 
 }
 
+func request_DecisionLogs_ExecuteQuery_0(ctx context.Context, marshaler runtime.Marshaler, client DecisionLogsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ExecuteQueryRequest
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.ExecuteQuery(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_DecisionLogs_ExecuteQuery_0(ctx context.Context, marshaler runtime.Marshaler, server DecisionLogsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ExecuteQueryRequest
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.ExecuteQuery(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterDecisionLogsHandlerServer registers the http handlers for service DecisionLogs to "mux".
 // UnaryRPC     :call DecisionLogsServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -242,7 +276,7 @@ func RegisterDecisionLogsHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetDecisionLog", runtime.WithHTTPPathPattern("/api/v1/decision_logs/{name}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetDecisionLog", runtime.WithHTTPPathPattern("/api/v1/decision_logs/decision_logs/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -288,7 +322,7 @@ func RegisterDecisionLogsHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetUser", runtime.WithHTTPPathPattern("/api/v1/decision_logs/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -302,6 +336,29 @@ func RegisterDecisionLogsHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		}
 
 		forward_DecisionLogs_GetUser_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_DecisionLogs_ExecuteQuery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/ExecuteQuery", runtime.WithHTTPPathPattern("/api/v1/decision_logs/query"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_DecisionLogs_ExecuteQuery_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_DecisionLogs_ExecuteQuery_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -370,7 +427,7 @@ func RegisterDecisionLogsHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetDecisionLog", runtime.WithHTTPPathPattern("/api/v1/decision_logs/{name}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetDecisionLog", runtime.WithHTTPPathPattern("/api/v1/decision_logs/decision_logs/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -410,7 +467,7 @@ func RegisterDecisionLogsHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/GetUser", runtime.WithHTTPPathPattern("/api/v1/decision_logs/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -426,17 +483,39 @@ func RegisterDecisionLogsHandlerClient(ctx context.Context, mux *runtime.ServeMu
 
 	})
 
+	mux.Handle("POST", pattern_DecisionLogs_ExecuteQuery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.decision_logs.v1.DecisionLogs/ExecuteQuery", runtime.WithHTTPPathPattern("/api/v1/decision_logs/query"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_DecisionLogs_ExecuteQuery_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_DecisionLogs_ExecuteQuery_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
 var (
 	pattern_DecisionLogs_ListDecisionLogs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 2}, []string{"api", "v1", "decision_logs"}, ""))
 
-	pattern_DecisionLogs_GetDecisionLog_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "decision_logs", "name"}, ""))
+	pattern_DecisionLogs_GetDecisionLog_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "decision_logs", "name"}, ""))
 
 	pattern_DecisionLogs_ListUsers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "decision_logs", "users"}, ""))
 
-	pattern_DecisionLogs_GetUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "users", "id"}, ""))
+	pattern_DecisionLogs_GetUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "decision_logs", "users", "id"}, ""))
+
+	pattern_DecisionLogs_ExecuteQuery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "decision_logs", "query"}, ""))
 )
 
 var (
@@ -447,4 +526,6 @@ var (
 	forward_DecisionLogs_ListUsers_0 = runtime.ForwardResponseMessage
 
 	forward_DecisionLogs_GetUser_0 = runtime.ForwardResponseMessage
+
+	forward_DecisionLogs_ExecuteQuery_0 = runtime.ForwardResponseMessage
 )
