@@ -11,3 +11,8 @@
 
 The package `aserto-dev/go-grpc` contains gRPC definitions for all Aserto services except the Authorizer service,
 defined in [`aserto-dev/go-grpc-authz`](https://github.com/aserto-dev/go-grpc-authz).
+
+## Aserto Go SDK
+
+The definitions in this package are used in [`aserto-go`](https://github.com/aserto-dev/aserto-go), the Go client
+package for Aserto and the recommended way to interact with Aserto services.
