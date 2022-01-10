@@ -35,12 +35,21 @@ func request_Registry_ListOrgs_0(ctx context.Context, marshaler runtime.Marshale
 	var protoReq ListOrgsRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
 	msg, err := client.ListOrgs(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -52,49 +61,24 @@ func local_request_Registry_ListOrgs_0(ctx context.Context, marshaler runtime.Ma
 	var protoReq ListOrgsRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
 	msg, err := server.ListOrgs(ctx, &protoReq)
-	return msg, metadata, err
-
-}
-
-func request_Registry_DeleteRepository_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteRepositoryRequest
-	var metadata runtime.ServerMetadata
-
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := client.DeleteRepository(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_Registry_DeleteRepository_0(ctx context.Context, marshaler runtime.Marshaler, server RegistryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteRepositoryRequest
-	var metadata runtime.ServerMetadata
-
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := server.DeleteRepository(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -167,6 +151,116 @@ func local_request_Registry_ListRepositories_0(ctx context.Context, marshaler ru
 	}
 
 	msg, err := server.ListRepositories(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Registry_DeleteRepository_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0, "repository": 1, "org": 2, "name": 3}, Base: []int{1, 1, 1, 2, 3, 0, 0, 0}, Check: []int{0, 1, 1, 3, 3, 2, 4, 5}}
+)
+
+func request_Registry_DeleteRepository_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteRepositoryRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	val, ok = pathParams["repository.org"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.org")
+	}
+
+	err = runtime.PopulateFieldFromPath(&protoReq, "repository.org", val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.org", err)
+	}
+
+	val, ok = pathParams["repository.name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.name")
+	}
+
+	err = runtime.PopulateFieldFromPath(&protoReq, "repository.name", val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.name", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Registry_DeleteRepository_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.DeleteRepository(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Registry_DeleteRepository_0(ctx context.Context, marshaler runtime.Marshaler, server RegistryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteRepositoryRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	val, ok = pathParams["repository.org"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.org")
+	}
+
+	err = runtime.PopulateFieldFromPath(&protoReq, "repository.org", val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.org", err)
+	}
+
+	val, ok = pathParams["repository.name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.name")
+	}
+
+	err = runtime.PopulateFieldFromPath(&protoReq, "repository.name", val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.name", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Registry_DeleteRepository_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.DeleteRepository(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -355,13 +449,13 @@ func local_request_Registry_CreateRepository_0(ctx context.Context, marshaler ru
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterRegistryHandlerFromEndpoint instead.
 func RegisterRegistryHandlerServer(ctx context.Context, mux *runtime.ServeMux, server RegistryServer) error {
 
-	mux.Handle("POST", pattern_Registry_ListOrgs_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Registry_ListOrgs_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListOrgs", runtime.WithHTTPPathPattern("/aserto.tenant.registry.v1.Registry/ListOrgs"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListOrgs", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -378,36 +472,13 @@ func RegisterRegistryHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 
 	})
 
-	mux.Handle("POST", pattern_Registry_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/DeleteRepository", runtime.WithHTTPPathPattern("/aserto.tenant.registry.v1.Registry/DeleteRepository"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_Registry_DeleteRepository_0(rctx, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_Registry_DeleteRepository_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
 	mux.Handle("GET", pattern_Registry_ListRepositories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListRepositories", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{org}/images"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListRepositories", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -424,13 +495,36 @@ func RegisterRegistryHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 
 	})
 
+	mux.Handle("DELETE", pattern_Registry_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/DeleteRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{repository.org}/{repository.name}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Registry_DeleteRepository_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Registry_DeleteRepository_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("GET", pattern_Registry_ListTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListTags", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/images/{repository.org}/{repository.name}/tags"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListTags", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{repository.org}/{repository.name}/tags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -453,7 +547,7 @@ func RegisterRegistryHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/CreateRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/images"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/CreateRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -511,11 +605,11 @@ func RegisterRegistryHandler(ctx context.Context, mux *runtime.ServeMux, conn *g
 // "RegistryClient" to call the correct interceptors.
 func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, client RegistryClient) error {
 
-	mux.Handle("POST", pattern_Registry_ListOrgs_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Registry_ListOrgs_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListOrgs", runtime.WithHTTPPathPattern("/aserto.tenant.registry.v1.Registry/ListOrgs"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListOrgs", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -531,31 +625,11 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 
 	})
 
-	mux.Handle("POST", pattern_Registry_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/DeleteRepository", runtime.WithHTTPPathPattern("/aserto.tenant.registry.v1.Registry/DeleteRepository"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_Registry_DeleteRepository_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_Registry_DeleteRepository_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
 	mux.Handle("GET", pattern_Registry_ListRepositories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListRepositories", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{org}/images"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListRepositories", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -571,11 +645,31 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 
 	})
 
+	mux.Handle("DELETE", pattern_Registry_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/DeleteRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{repository.org}/{repository.name}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Registry_DeleteRepository_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Registry_DeleteRepository_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("GET", pattern_Registry_ListTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListTags", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/images/{repository.org}/{repository.name}/tags"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/ListTags", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/{repository.org}/{repository.name}/tags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -595,7 +689,7 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/CreateRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}/images"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.registry.v1.Registry/CreateRepository", runtime.WithHTTPPathPattern("/api/v1/registry/{connection_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -615,23 +709,23 @@ func RegisterRegistryHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 }
 
 var (
-	pattern_Registry_ListOrgs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.registry.v1.Registry", "ListOrgs"}, ""))
+	pattern_Registry_ListOrgs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "registry", "connection_id"}, ""))
 
-	pattern_Registry_DeleteRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.registry.v1.Registry", "DeleteRepository"}, ""))
+	pattern_Registry_ListRepositories_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "registry", "connection_id", "org"}, ""))
 
-	pattern_Registry_ListRepositories_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "registry", "connection_id", "org", "images"}, ""))
+	pattern_Registry_DeleteRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"api", "v1", "registry", "connection_id", "repository.org", "repository.name"}, ""))
 
-	pattern_Registry_ListTags_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"api", "v1", "registry", "connection_id", "images", "repository.org", "repository.name", "tags"}, ""))
+	pattern_Registry_ListTags_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 2, 6}, []string{"api", "v1", "registry", "connection_id", "repository.org", "repository.name", "tags"}, ""))
 
-	pattern_Registry_CreateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "registry", "connection_id", "images"}, ""))
+	pattern_Registry_CreateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "registry", "connection_id"}, ""))
 )
 
 var (
 	forward_Registry_ListOrgs_0 = runtime.ForwardResponseMessage
 
-	forward_Registry_DeleteRepository_0 = runtime.ForwardResponseMessage
-
 	forward_Registry_ListRepositories_0 = runtime.ForwardResponseMessage
+
+	forward_Registry_DeleteRepository_0 = runtime.ForwardResponseMessage
 
 	forward_Registry_ListTags_0 = runtime.ForwardResponseMessage
 

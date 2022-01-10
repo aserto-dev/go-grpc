@@ -19,8 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RegistryClient interface {
 	ListOrgs(ctx context.Context, in *ListOrgsRequest, opts ...grpc.CallOption) (*ListOrgsResponse, error)
-	DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error)
 	ListRepositories(ctx context.Context, in *ListRepositoriesRequest, opts ...grpc.CallOption) (*ListRepositoriesResponse, error)
+	DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error)
 	ListTags(ctx context.Context, in *ListTagsRequest, opts ...grpc.CallOption) (*ListTagsResponse, error)
 	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
 }
@@ -42,18 +42,18 @@ func (c *registryClient) ListOrgs(ctx context.Context, in *ListOrgsRequest, opts
 	return out, nil
 }
 
-func (c *registryClient) DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error) {
-	out := new(DeleteRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/DeleteRepository", in, out, opts...)
+func (c *registryClient) ListRepositories(ctx context.Context, in *ListRepositoriesRequest, opts ...grpc.CallOption) (*ListRepositoriesResponse, error) {
+	out := new(ListRepositoriesResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/ListRepositories", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *registryClient) ListRepositories(ctx context.Context, in *ListRepositoriesRequest, opts ...grpc.CallOption) (*ListRepositoriesResponse, error) {
-	out := new(ListRepositoriesResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/ListRepositories", in, out, opts...)
+func (c *registryClient) DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error) {
+	out := new(DeleteRepositoryResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/DeleteRepository", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +83,8 @@ func (c *registryClient) CreateRepository(ctx context.Context, in *CreateReposit
 // for forward compatibility
 type RegistryServer interface {
 	ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error)
-	DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error)
 	ListRepositories(context.Context, *ListRepositoriesRequest) (*ListRepositoriesResponse, error)
+	DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error)
 	ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error)
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
 }
@@ -96,11 +96,11 @@ type UnimplementedRegistryServer struct {
 func (UnimplementedRegistryServer) ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListOrgs not implemented")
 }
-func (UnimplementedRegistryServer) DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteRepository not implemented")
-}
 func (UnimplementedRegistryServer) ListRepositories(context.Context, *ListRepositoriesRequest) (*ListRepositoriesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRepositories not implemented")
+}
+func (UnimplementedRegistryServer) DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRepository not implemented")
 }
 func (UnimplementedRegistryServer) ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTags not implemented")
@@ -138,24 +138,6 @@ func _Registry_ListOrgs_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Registry_DeleteRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteRepositoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RegistryServer).DeleteRepository(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/aserto.tenant.registry.v1.Registry/DeleteRepository",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RegistryServer).DeleteRepository(ctx, req.(*DeleteRepositoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Registry_ListRepositories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListRepositoriesRequest)
 	if err := dec(in); err != nil {
@@ -170,6 +152,24 @@ func _Registry_ListRepositories_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RegistryServer).ListRepositories(ctx, req.(*ListRepositoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Registry_DeleteRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRepositoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).DeleteRepository(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.registry.v1.Registry/DeleteRepository",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).DeleteRepository(ctx, req.(*DeleteRepositoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -222,12 +222,12 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Registry_ListOrgs_Handler,
 		},
 		{
-			MethodName: "DeleteRepository",
-			Handler:    _Registry_DeleteRepository_Handler,
-		},
-		{
 			MethodName: "ListRepositories",
 			Handler:    _Registry_ListRepositories_Handler,
+		},
+		{
+			MethodName: "DeleteRepository",
+			Handler:    _Registry_DeleteRepository_Handler,
 		},
 		{
 			MethodName: "ListTags",
