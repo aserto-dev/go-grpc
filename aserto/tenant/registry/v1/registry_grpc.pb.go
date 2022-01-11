@@ -19,10 +19,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RegistryClient interface {
 	ListOrgs(ctx context.Context, in *ListOrgsRequest, opts ...grpc.CallOption) (*ListOrgsResponse, error)
-	ListRepositories(ctx context.Context, in *ListRepositoriesRequest, opts ...grpc.CallOption) (*ListRepositoriesResponse, error)
-	DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error)
+	ListPolicyRepos(ctx context.Context, in *ListPolicyReposRequest, opts ...grpc.CallOption) (*ListPolicyReposResponse, error)
+	DeletePolicyRepo(ctx context.Context, in *DeletePolicyRepoRequest, opts ...grpc.CallOption) (*DeletePolicyRepoResponse, error)
 	ListTags(ctx context.Context, in *ListTagsRequest, opts ...grpc.CallOption) (*ListTagsResponse, error)
-	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
+	CreatePolicyRepo(ctx context.Context, in *CreatePolicyRepoRequest, opts ...grpc.CallOption) (*CreatePolicyRepoResponse, error)
 }
 
 type registryClient struct {
@@ -42,18 +42,18 @@ func (c *registryClient) ListOrgs(ctx context.Context, in *ListOrgsRequest, opts
 	return out, nil
 }
 
-func (c *registryClient) ListRepositories(ctx context.Context, in *ListRepositoriesRequest, opts ...grpc.CallOption) (*ListRepositoriesResponse, error) {
-	out := new(ListRepositoriesResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/ListRepositories", in, out, opts...)
+func (c *registryClient) ListPolicyRepos(ctx context.Context, in *ListPolicyReposRequest, opts ...grpc.CallOption) (*ListPolicyReposResponse, error) {
+	out := new(ListPolicyReposResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/ListPolicyRepos", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *registryClient) DeleteRepository(ctx context.Context, in *DeleteRepositoryRequest, opts ...grpc.CallOption) (*DeleteRepositoryResponse, error) {
-	out := new(DeleteRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/DeleteRepository", in, out, opts...)
+func (c *registryClient) DeletePolicyRepo(ctx context.Context, in *DeletePolicyRepoRequest, opts ...grpc.CallOption) (*DeletePolicyRepoResponse, error) {
+	out := new(DeletePolicyRepoResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/DeletePolicyRepo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -69,9 +69,9 @@ func (c *registryClient) ListTags(ctx context.Context, in *ListTagsRequest, opts
 	return out, nil
 }
 
-func (c *registryClient) CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error) {
-	out := new(CreateRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/CreateRepository", in, out, opts...)
+func (c *registryClient) CreatePolicyRepo(ctx context.Context, in *CreatePolicyRepoRequest, opts ...grpc.CallOption) (*CreatePolicyRepoResponse, error) {
+	out := new(CreatePolicyRepoResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/CreatePolicyRepo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,10 +83,10 @@ func (c *registryClient) CreateRepository(ctx context.Context, in *CreateReposit
 // for forward compatibility
 type RegistryServer interface {
 	ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error)
-	ListRepositories(context.Context, *ListRepositoriesRequest) (*ListRepositoriesResponse, error)
-	DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error)
+	ListPolicyRepos(context.Context, *ListPolicyReposRequest) (*ListPolicyReposResponse, error)
+	DeletePolicyRepo(context.Context, *DeletePolicyRepoRequest) (*DeletePolicyRepoResponse, error)
 	ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error)
-	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
+	CreatePolicyRepo(context.Context, *CreatePolicyRepoRequest) (*CreatePolicyRepoResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -96,17 +96,17 @@ type UnimplementedRegistryServer struct {
 func (UnimplementedRegistryServer) ListOrgs(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListOrgs not implemented")
 }
-func (UnimplementedRegistryServer) ListRepositories(context.Context, *ListRepositoriesRequest) (*ListRepositoriesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListRepositories not implemented")
+func (UnimplementedRegistryServer) ListPolicyRepos(context.Context, *ListPolicyReposRequest) (*ListPolicyReposResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPolicyRepos not implemented")
 }
-func (UnimplementedRegistryServer) DeleteRepository(context.Context, *DeleteRepositoryRequest) (*DeleteRepositoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteRepository not implemented")
+func (UnimplementedRegistryServer) DeletePolicyRepo(context.Context, *DeletePolicyRepoRequest) (*DeletePolicyRepoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePolicyRepo not implemented")
 }
 func (UnimplementedRegistryServer) ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTags not implemented")
 }
-func (UnimplementedRegistryServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
+func (UnimplementedRegistryServer) CreatePolicyRepo(context.Context, *CreatePolicyRepoRequest) (*CreatePolicyRepoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicyRepo not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -138,38 +138,38 @@ func _Registry_ListOrgs_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Registry_ListRepositories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRepositoriesRequest)
+func _Registry_ListPolicyRepos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPolicyReposRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RegistryServer).ListRepositories(ctx, in)
+		return srv.(RegistryServer).ListPolicyRepos(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/aserto.tenant.registry.v1.Registry/ListRepositories",
+		FullMethod: "/aserto.tenant.registry.v1.Registry/ListPolicyRepos",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RegistryServer).ListRepositories(ctx, req.(*ListRepositoriesRequest))
+		return srv.(RegistryServer).ListPolicyRepos(ctx, req.(*ListPolicyReposRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Registry_DeleteRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteRepositoryRequest)
+func _Registry_DeletePolicyRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePolicyRepoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RegistryServer).DeleteRepository(ctx, in)
+		return srv.(RegistryServer).DeletePolicyRepo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/aserto.tenant.registry.v1.Registry/DeleteRepository",
+		FullMethod: "/aserto.tenant.registry.v1.Registry/DeletePolicyRepo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RegistryServer).DeleteRepository(ctx, req.(*DeleteRepositoryRequest))
+		return srv.(RegistryServer).DeletePolicyRepo(ctx, req.(*DeletePolicyRepoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,20 +192,20 @@ func _Registry_ListTags_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Registry_CreateRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateRepositoryRequest)
+func _Registry_CreatePolicyRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePolicyRepoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RegistryServer).CreateRepository(ctx, in)
+		return srv.(RegistryServer).CreatePolicyRepo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/aserto.tenant.registry.v1.Registry/CreateRepository",
+		FullMethod: "/aserto.tenant.registry.v1.Registry/CreatePolicyRepo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RegistryServer).CreateRepository(ctx, req.(*CreateRepositoryRequest))
+		return srv.(RegistryServer).CreatePolicyRepo(ctx, req.(*CreatePolicyRepoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -222,20 +222,20 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Registry_ListOrgs_Handler,
 		},
 		{
-			MethodName: "ListRepositories",
-			Handler:    _Registry_ListRepositories_Handler,
+			MethodName: "ListPolicyRepos",
+			Handler:    _Registry_ListPolicyRepos_Handler,
 		},
 		{
-			MethodName: "DeleteRepository",
-			Handler:    _Registry_DeleteRepository_Handler,
+			MethodName: "DeletePolicyRepo",
+			Handler:    _Registry_DeletePolicyRepo_Handler,
 		},
 		{
 			MethodName: "ListTags",
 			Handler:    _Registry_ListTags_Handler,
 		},
 		{
-			MethodName: "CreateRepository",
-			Handler:    _Registry_CreateRepository_Handler,
+			MethodName: "CreatePolicyRepo",
+			Handler:    _Registry_CreatePolicyRepo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
