@@ -165,7 +165,7 @@ func RegisterPolicyBuilderHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/ListPolicyBuilders", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/ListPolicyBuilders", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -188,7 +188,7 @@ func RegisterPolicyBuilderHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/CreatePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/CreatePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -211,7 +211,7 @@ func RegisterPolicyBuilderHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/DeletePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/DeletePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -273,7 +273,7 @@ func RegisterPolicyBuilderHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/ListPolicyBuilders", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/ListPolicyBuilders", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -293,7 +293,7 @@ func RegisterPolicyBuilderHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/CreatePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/CreatePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -313,7 +313,7 @@ func RegisterPolicyBuilderHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/DeletePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policy_builder/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy_builder.v1.PolicyBuilder/DeletePolicyBuilder", runtime.WithHTTPPathPattern("/api/v1/tenant/policybuilder/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -333,11 +333,11 @@ func RegisterPolicyBuilderHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_PolicyBuilder_ListPolicyBuilders_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "policy_builder"}, ""))
+	pattern_PolicyBuilder_ListPolicyBuilders_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "policybuilder"}, ""))
 
-	pattern_PolicyBuilder_CreatePolicyBuilder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "policy_builder"}, ""))
+	pattern_PolicyBuilder_CreatePolicyBuilder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "policybuilder"}, ""))
 
-	pattern_PolicyBuilder_DeletePolicyBuilder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "policy_builder", "id"}, ""))
+	pattern_PolicyBuilder_DeletePolicyBuilder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "policybuilder", "id"}, ""))
 )
 
 var (
