@@ -22,6 +22,7 @@ type RegistryClient interface {
 	ListPolicyRepos(ctx context.Context, in *ListPolicyReposRequest, opts ...grpc.CallOption) (*ListPolicyReposResponse, error)
 	DeletePolicyRepo(ctx context.Context, in *DeletePolicyRepoRequest, opts ...grpc.CallOption) (*DeletePolicyRepoResponse, error)
 	ListTags(ctx context.Context, in *ListTagsRequest, opts ...grpc.CallOption) (*ListTagsResponse, error)
+	GetTag(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagResponse, error)
 	CreatePolicyRepo(ctx context.Context, in *CreatePolicyRepoRequest, opts ...grpc.CallOption) (*CreatePolicyRepoResponse, error)
 }
 
@@ -69,6 +70,15 @@ func (c *registryClient) ListTags(ctx context.Context, in *ListTagsRequest, opts
 	return out, nil
 }
 
+func (c *registryClient) GetTag(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagResponse, error) {
+	out := new(GetTagResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/GetTag", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *registryClient) CreatePolicyRepo(ctx context.Context, in *CreatePolicyRepoRequest, opts ...grpc.CallOption) (*CreatePolicyRepoResponse, error) {
 	out := new(CreatePolicyRepoResponse)
 	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/CreatePolicyRepo", in, out, opts...)
@@ -86,6 +96,7 @@ type RegistryServer interface {
 	ListPolicyRepos(context.Context, *ListPolicyReposRequest) (*ListPolicyReposResponse, error)
 	DeletePolicyRepo(context.Context, *DeletePolicyRepoRequest) (*DeletePolicyRepoResponse, error)
 	ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error)
+	GetTag(context.Context, *GetTagRequest) (*GetTagResponse, error)
 	CreatePolicyRepo(context.Context, *CreatePolicyRepoRequest) (*CreatePolicyRepoResponse, error)
 }
 
@@ -104,6 +115,9 @@ func (UnimplementedRegistryServer) DeletePolicyRepo(context.Context, *DeletePoli
 }
 func (UnimplementedRegistryServer) ListTags(context.Context, *ListTagsRequest) (*ListTagsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTags not implemented")
+}
+func (UnimplementedRegistryServer) GetTag(context.Context, *GetTagRequest) (*GetTagResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTag not implemented")
 }
 func (UnimplementedRegistryServer) CreatePolicyRepo(context.Context, *CreatePolicyRepoRequest) (*CreatePolicyRepoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicyRepo not implemented")
@@ -192,6 +206,24 @@ func _Registry_ListTags_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_GetTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).GetTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.registry.v1.Registry/GetTag",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).GetTag(ctx, req.(*GetTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Registry_CreatePolicyRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreatePolicyRepoRequest)
 	if err := dec(in); err != nil {
@@ -232,6 +264,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListTags",
 			Handler:    _Registry_ListTags_Handler,
+		},
+		{
+			MethodName: "GetTag",
+			Handler:    _Registry_GetTag_Handler,
 		},
 		{
 			MethodName: "CreatePolicyRepo",
