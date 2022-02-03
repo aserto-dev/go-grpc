@@ -104,14 +104,14 @@ func request_SourceCodeCtl_ListRepo_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	msg, err := client.ListRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -140,17 +140,109 @@ func local_request_SourceCodeCtl_ListRepo_0(ctx context.Context, marshaler runti
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	msg, err := server.ListRepo(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_SourceCodeCtl_GetRepo_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetRepoRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	val, ok = pathParams["org"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
+	}
+
+	protoReq.Org, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := client.GetRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SourceCodeCtl_GetRepo_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetRepoRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	val, ok = pathParams["org"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
+	}
+
+	protoReq.Org, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := server.GetRepo(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -184,14 +276,14 @@ func request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	msg, err := client.CreateRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -228,14 +320,14 @@ func local_request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler run
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	msg, err := server.CreateRepo(ctx, &protoReq)
@@ -368,14 +460,14 @@ func request_SourceCodeCtl_IsRepoConnected_0(ctx context.Context, marshaler runt
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	val, ok = pathParams["repo"]
@@ -414,14 +506,14 @@ func local_request_SourceCodeCtl_IsRepoConnected_0(ctx context.Context, marshale
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
 
-	val, ok = pathParams["owner"]
+	val, ok = pathParams["org"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "owner")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
 
-	protoReq.Owner, err = runtime.String(val)
+	protoReq.Org, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
 
 	val, ok = pathParams["repo"]
@@ -474,7 +566,7 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -491,13 +583,36 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 
 	})
 
+	mux.Handle("GET", pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SourceCodeCtl_GetRepo_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SourceCodeCtl_GetRepo_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -566,7 +681,7 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}/{repo}/connected"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -648,7 +763,7 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -664,11 +779,31 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 
 	})
 
+	mux.Handle("GET", pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SourceCodeCtl_GetRepo_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SourceCodeCtl_GetRepo_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -728,7 +863,7 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{owner}/{repo}/connected"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -750,21 +885,25 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 var (
 	pattern_SourceCodeCtl_ListOrg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "orgs"}, ""))
 
-	pattern_SourceCodeCtl_ListRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "owner"}, ""))
+	pattern_SourceCodeCtl_ListRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
 
-	pattern_SourceCodeCtl_CreateRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "owner"}, ""))
+	pattern_SourceCodeCtl_GetRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org", "name"}, ""))
+
+	pattern_SourceCodeCtl_CreateRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
 
 	pattern_SourceCodeCtl_ListTemplates_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "templates"}, ""))
 
 	pattern_SourceCodeCtl_GetProfile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "profile"}, ""))
 
-	pattern_SourceCodeCtl_IsRepoConnected_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7, 2, 8}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "owner", "repo", "connected"}, ""))
+	pattern_SourceCodeCtl_IsRepoConnected_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7, 2, 8}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org", "repo", "connected"}, ""))
 )
 
 var (
 	forward_SourceCodeCtl_ListOrg_0 = runtime.ForwardResponseMessage
 
 	forward_SourceCodeCtl_ListRepo_0 = runtime.ForwardResponseMessage
+
+	forward_SourceCodeCtl_GetRepo_0 = runtime.ForwardResponseMessage
 
 	forward_SourceCodeCtl_CreateRepo_0 = runtime.ForwardResponseMessage
 

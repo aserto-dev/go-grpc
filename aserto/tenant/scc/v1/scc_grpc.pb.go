@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type SourceCodeCtlClient interface {
 	ListOrg(ctx context.Context, in *ListOrgRequest, opts ...grpc.CallOption) (*ListOrgResponse, error)
 	ListRepo(ctx context.Context, in *ListRepoRequest, opts ...grpc.CallOption) (*ListRepoResponse, error)
+	GetRepo(ctx context.Context, in *GetRepoRequest, opts ...grpc.CallOption) (*GetRepoResponse, error)
 	CreateRepo(ctx context.Context, in *CreateRepoRequest, opts ...grpc.CallOption) (*CreateRepoResponse, error)
 	ListTemplates(ctx context.Context, in *ListTemplatesRequest, opts ...grpc.CallOption) (*ListTemplatesResponse, error)
 	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error)
@@ -46,6 +47,15 @@ func (c *sourceCodeCtlClient) ListOrg(ctx context.Context, in *ListOrgRequest, o
 func (c *sourceCodeCtlClient) ListRepo(ctx context.Context, in *ListRepoRequest, opts ...grpc.CallOption) (*ListRepoResponse, error) {
 	out := new(ListRepoResponse)
 	err := c.cc.Invoke(ctx, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sourceCodeCtlClient) GetRepo(ctx context.Context, in *GetRepoRequest, opts ...grpc.CallOption) (*GetRepoResponse, error) {
+	out := new(GetRepoResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,6 +104,7 @@ func (c *sourceCodeCtlClient) IsRepoConnected(ctx context.Context, in *IsRepoCon
 type SourceCodeCtlServer interface {
 	ListOrg(context.Context, *ListOrgRequest) (*ListOrgResponse, error)
 	ListRepo(context.Context, *ListRepoRequest) (*ListRepoResponse, error)
+	GetRepo(context.Context, *GetRepoRequest) (*GetRepoResponse, error)
 	CreateRepo(context.Context, *CreateRepoRequest) (*CreateRepoResponse, error)
 	ListTemplates(context.Context, *ListTemplatesRequest) (*ListTemplatesResponse, error)
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error)
@@ -109,6 +120,9 @@ func (UnimplementedSourceCodeCtlServer) ListOrg(context.Context, *ListOrgRequest
 }
 func (UnimplementedSourceCodeCtlServer) ListRepo(context.Context, *ListRepoRequest) (*ListRepoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRepo not implemented")
+}
+func (UnimplementedSourceCodeCtlServer) GetRepo(context.Context, *GetRepoRequest) (*GetRepoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRepo not implemented")
 }
 func (UnimplementedSourceCodeCtlServer) CreateRepo(context.Context, *CreateRepoRequest) (*CreateRepoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRepo not implemented")
@@ -166,6 +180,24 @@ func _SourceCodeCtl_ListRepo_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SourceCodeCtlServer).ListRepo(ctx, req.(*ListRepoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SourceCodeCtl_GetRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRepoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SourceCodeCtlServer).GetRepo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SourceCodeCtlServer).GetRepo(ctx, req.(*GetRepoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -256,6 +288,10 @@ var SourceCodeCtl_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRepo",
 			Handler:    _SourceCodeCtl_ListRepo_Handler,
+		},
+		{
+			MethodName: "GetRepo",
+			Handler:    _SourceCodeCtl_GetRepo_Handler,
 		},
 		{
 			MethodName: "CreateRepo",

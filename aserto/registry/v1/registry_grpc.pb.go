@@ -27,6 +27,7 @@ type RegistryClient interface {
 	SetImageVisibility(ctx context.Context, in *SetImageVisibilityRequest, opts ...grpc.CallOption) (*SetImageVisibilityResponse, error)
 	GetReadAccessToken(ctx context.Context, in *GetReadAccessTokenRequest, opts ...grpc.CallOption) (*GetReadAccessTokenResponse, error)
 	GetWriteAccessToken(ctx context.Context, in *GetWriteAccessTokenRequest, opts ...grpc.CallOption) (*GetWriteAccessTokenResponse, error)
+	ListTagsWithDetails(ctx context.Context, in *ListTagsWithDetailsRequest, opts ...grpc.CallOption) (*ListTagsWithDetailsResponse, error)
 }
 
 type registryClient struct {
@@ -118,6 +119,15 @@ func (c *registryClient) GetWriteAccessToken(ctx context.Context, in *GetWriteAc
 	return out, nil
 }
 
+func (c *registryClient) ListTagsWithDetails(ctx context.Context, in *ListTagsWithDetailsRequest, opts ...grpc.CallOption) (*ListTagsWithDetailsResponse, error) {
+	out := new(ListTagsWithDetailsResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListTagsWithDetails", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
@@ -131,6 +141,7 @@ type RegistryServer interface {
 	SetImageVisibility(context.Context, *SetImageVisibilityRequest) (*SetImageVisibilityResponse, error)
 	GetReadAccessToken(context.Context, *GetReadAccessTokenRequest) (*GetReadAccessTokenResponse, error)
 	GetWriteAccessToken(context.Context, *GetWriteAccessTokenRequest) (*GetWriteAccessTokenResponse, error)
+	ListTagsWithDetails(context.Context, *ListTagsWithDetailsRequest) (*ListTagsWithDetailsResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -163,6 +174,9 @@ func (UnimplementedRegistryServer) GetReadAccessToken(context.Context, *GetReadA
 }
 func (UnimplementedRegistryServer) GetWriteAccessToken(context.Context, *GetWriteAccessTokenRequest) (*GetWriteAccessTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWriteAccessToken not implemented")
+}
+func (UnimplementedRegistryServer) ListTagsWithDetails(context.Context, *ListTagsWithDetailsRequest) (*ListTagsWithDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTagsWithDetails not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -338,6 +352,24 @@ func _Registry_GetWriteAccessToken_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_ListTagsWithDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTagsWithDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListTagsWithDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/ListTagsWithDetails",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListTagsWithDetails(ctx, req.(*ListTagsWithDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -380,6 +412,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWriteAccessToken",
 			Handler:    _Registry_GetWriteAccessToken_Handler,
+		},
+		{
+			MethodName: "ListTagsWithDetails",
+			Handler:    _Registry_ListTagsWithDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
