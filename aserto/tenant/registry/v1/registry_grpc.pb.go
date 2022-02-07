@@ -22,6 +22,7 @@ type RegistryClient interface {
 	ListRegistryRepos(ctx context.Context, in *ListRegistryReposRequest, opts ...grpc.CallOption) (*ListRegistryReposResponse, error)
 	DeleteRegistryRepo(ctx context.Context, in *DeleteRegistryRepoRequest, opts ...grpc.CallOption) (*DeleteRegistryRepoResponse, error)
 	ListRegistryRepoTags(ctx context.Context, in *ListRegistryRepoTagsRequest, opts ...grpc.CallOption) (*ListRegistryRepoTagsResponse, error)
+	ListRegistryRepoDigests(ctx context.Context, in *ListRegistryRepoDigestsRequest, opts ...grpc.CallOption) (*ListRegistryRepoDigestsResponse, error)
 	GetRegistryRepoTag(ctx context.Context, in *GetRegistryRepoTagRequest, opts ...grpc.CallOption) (*GetRegistryRepoTagResponse, error)
 	CreateRegistryRepo(ctx context.Context, in *CreateRegistryRepoRequest, opts ...grpc.CallOption) (*CreateRegistryRepoResponse, error)
 }
@@ -70,6 +71,15 @@ func (c *registryClient) ListRegistryRepoTags(ctx context.Context, in *ListRegis
 	return out, nil
 }
 
+func (c *registryClient) ListRegistryRepoDigests(ctx context.Context, in *ListRegistryRepoDigestsRequest, opts ...grpc.CallOption) (*ListRegistryRepoDigestsResponse, error) {
+	out := new(ListRegistryRepoDigestsResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/ListRegistryRepoDigests", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *registryClient) GetRegistryRepoTag(ctx context.Context, in *GetRegistryRepoTagRequest, opts ...grpc.CallOption) (*GetRegistryRepoTagResponse, error) {
 	out := new(GetRegistryRepoTagResponse)
 	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/GetRegistryRepoTag", in, out, opts...)
@@ -96,6 +106,7 @@ type RegistryServer interface {
 	ListRegistryRepos(context.Context, *ListRegistryReposRequest) (*ListRegistryReposResponse, error)
 	DeleteRegistryRepo(context.Context, *DeleteRegistryRepoRequest) (*DeleteRegistryRepoResponse, error)
 	ListRegistryRepoTags(context.Context, *ListRegistryRepoTagsRequest) (*ListRegistryRepoTagsResponse, error)
+	ListRegistryRepoDigests(context.Context, *ListRegistryRepoDigestsRequest) (*ListRegistryRepoDigestsResponse, error)
 	GetRegistryRepoTag(context.Context, *GetRegistryRepoTagRequest) (*GetRegistryRepoTagResponse, error)
 	CreateRegistryRepo(context.Context, *CreateRegistryRepoRequest) (*CreateRegistryRepoResponse, error)
 }
@@ -115,6 +126,9 @@ func (UnimplementedRegistryServer) DeleteRegistryRepo(context.Context, *DeleteRe
 }
 func (UnimplementedRegistryServer) ListRegistryRepoTags(context.Context, *ListRegistryRepoTagsRequest) (*ListRegistryRepoTagsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRegistryRepoTags not implemented")
+}
+func (UnimplementedRegistryServer) ListRegistryRepoDigests(context.Context, *ListRegistryRepoDigestsRequest) (*ListRegistryRepoDigestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRegistryRepoDigests not implemented")
 }
 func (UnimplementedRegistryServer) GetRegistryRepoTag(context.Context, *GetRegistryRepoTagRequest) (*GetRegistryRepoTagResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRegistryRepoTag not implemented")
@@ -206,6 +220,24 @@ func _Registry_ListRegistryRepoTags_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_ListRegistryRepoDigests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRegistryRepoDigestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListRegistryRepoDigests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.registry.v1.Registry/ListRegistryRepoDigests",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListRegistryRepoDigests(ctx, req.(*ListRegistryRepoDigestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Registry_GetRegistryRepoTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRegistryRepoTagRequest)
 	if err := dec(in); err != nil {
@@ -264,6 +296,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRegistryRepoTags",
 			Handler:    _Registry_ListRegistryRepoTags_Handler,
+		},
+		{
+			MethodName: "ListRegistryRepoDigests",
+			Handler:    _Registry_ListRegistryRepoDigests_Handler,
 		},
 		{
 			MethodName: "GetRegistryRepoTag",
