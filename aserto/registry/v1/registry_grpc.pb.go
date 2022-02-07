@@ -28,6 +28,7 @@ type RegistryClient interface {
 	GetReadAccessToken(ctx context.Context, in *GetReadAccessTokenRequest, opts ...grpc.CallOption) (*GetReadAccessTokenResponse, error)
 	GetWriteAccessToken(ctx context.Context, in *GetWriteAccessTokenRequest, opts ...grpc.CallOption) (*GetWriteAccessTokenResponse, error)
 	ListTagsWithDetails(ctx context.Context, in *ListTagsWithDetailsRequest, opts ...grpc.CallOption) (*ListTagsWithDetailsResponse, error)
+	ListDigests(ctx context.Context, in *ListDigestsRequest, opts ...grpc.CallOption) (*ListDigestsResponse, error)
 }
 
 type registryClient struct {
@@ -128,6 +129,15 @@ func (c *registryClient) ListTagsWithDetails(ctx context.Context, in *ListTagsWi
 	return out, nil
 }
 
+func (c *registryClient) ListDigests(ctx context.Context, in *ListDigestsRequest, opts ...grpc.CallOption) (*ListDigestsResponse, error) {
+	out := new(ListDigestsResponse)
+	err := c.cc.Invoke(ctx, "/aserto.registry.v1.Registry/ListDigests", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
@@ -142,6 +152,7 @@ type RegistryServer interface {
 	GetReadAccessToken(context.Context, *GetReadAccessTokenRequest) (*GetReadAccessTokenResponse, error)
 	GetWriteAccessToken(context.Context, *GetWriteAccessTokenRequest) (*GetWriteAccessTokenResponse, error)
 	ListTagsWithDetails(context.Context, *ListTagsWithDetailsRequest) (*ListTagsWithDetailsResponse, error)
+	ListDigests(context.Context, *ListDigestsRequest) (*ListDigestsResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -177,6 +188,9 @@ func (UnimplementedRegistryServer) GetWriteAccessToken(context.Context, *GetWrit
 }
 func (UnimplementedRegistryServer) ListTagsWithDetails(context.Context, *ListTagsWithDetailsRequest) (*ListTagsWithDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTagsWithDetails not implemented")
+}
+func (UnimplementedRegistryServer) ListDigests(context.Context, *ListDigestsRequest) (*ListDigestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDigests not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -370,6 +384,24 @@ func _Registry_ListTagsWithDetails_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_ListDigests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDigestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).ListDigests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.registry.v1.Registry/ListDigests",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).ListDigests(ctx, req.(*ListDigestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -416,6 +448,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListTagsWithDetails",
 			Handler:    _Registry_ListTagsWithDetails_Handler,
+		},
+		{
+			MethodName: "ListDigests",
+			Handler:    _Registry_ListDigests_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
