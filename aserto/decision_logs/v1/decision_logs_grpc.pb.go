@@ -23,6 +23,7 @@ type DecisionLogsClient interface {
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 	ExecuteQuery(ctx context.Context, in *ExecuteQueryRequest, opts ...grpc.CallOption) (*ExecuteQueryResponse, error)
+	GetDecisions(ctx context.Context, in *GetDecisionsRequest, opts ...grpc.CallOption) (DecisionLogs_GetDecisionsClient, error)
 }
 
 type decisionLogsClient struct {
@@ -78,6 +79,38 @@ func (c *decisionLogsClient) ExecuteQuery(ctx context.Context, in *ExecuteQueryR
 	return out, nil
 }
 
+func (c *decisionLogsClient) GetDecisions(ctx context.Context, in *GetDecisionsRequest, opts ...grpc.CallOption) (DecisionLogs_GetDecisionsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DecisionLogs_ServiceDesc.Streams[0], "/aserto.decision_logs.v1.DecisionLogs/GetDecisions", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &decisionLogsGetDecisionsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type DecisionLogs_GetDecisionsClient interface {
+	Recv() (*GetDecisionsResponse, error)
+	grpc.ClientStream
+}
+
+type decisionLogsGetDecisionsClient struct {
+	grpc.ClientStream
+}
+
+func (x *decisionLogsGetDecisionsClient) Recv() (*GetDecisionsResponse, error) {
+	m := new(GetDecisionsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // DecisionLogsServer is the server API for DecisionLogs service.
 // All implementations should embed UnimplementedDecisionLogsServer
 // for forward compatibility
@@ -87,6 +120,7 @@ type DecisionLogsServer interface {
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	ExecuteQuery(context.Context, *ExecuteQueryRequest) (*ExecuteQueryResponse, error)
+	GetDecisions(*GetDecisionsRequest, DecisionLogs_GetDecisionsServer) error
 }
 
 // UnimplementedDecisionLogsServer should be embedded to have forward compatible implementations.
@@ -107,6 +141,9 @@ func (UnimplementedDecisionLogsServer) GetUser(context.Context, *GetUserRequest)
 }
 func (UnimplementedDecisionLogsServer) ExecuteQuery(context.Context, *ExecuteQueryRequest) (*ExecuteQueryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExecuteQuery not implemented")
+}
+func (UnimplementedDecisionLogsServer) GetDecisions(*GetDecisionsRequest, DecisionLogs_GetDecisionsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetDecisions not implemented")
 }
 
 // UnsafeDecisionLogsServer may be embedded to opt out of forward compatibility for this service.
@@ -210,6 +247,27 @@ func _DecisionLogs_ExecuteQuery_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DecisionLogs_GetDecisions_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetDecisionsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DecisionLogsServer).GetDecisions(m, &decisionLogsGetDecisionsServer{stream})
+}
+
+type DecisionLogs_GetDecisionsServer interface {
+	Send(*GetDecisionsResponse) error
+	grpc.ServerStream
+}
+
+type decisionLogsGetDecisionsServer struct {
+	grpc.ServerStream
+}
+
+func (x *decisionLogsGetDecisionsServer) Send(m *GetDecisionsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // DecisionLogs_ServiceDesc is the grpc.ServiceDesc for DecisionLogs service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +296,12 @@ var DecisionLogs_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DecisionLogs_ExecuteQuery_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetDecisions",
+			Handler:       _DecisionLogs_GetDecisions_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "aserto/decision_logs/v1/decision_logs.proto",
 }
