@@ -25,6 +25,7 @@ type ConnectionClient interface {
 	DeleteConnection(ctx context.Context, in *DeleteConnectionRequest, opts ...grpc.CallOption) (*DeleteConnectionResponse, error)
 	VerifyConnection(ctx context.Context, in *VerifyConnectionRequest, opts ...grpc.CallOption) (*VerifyConnectionResponse, error)
 	RotateSecret(ctx context.Context, in *RotateSecretRequest, opts ...grpc.CallOption) (*RotateSecretResponse, error)
+	ConnectionAvailable(ctx context.Context, in *ConnectionAvailableRequest, opts ...grpc.CallOption) (*ConnectionAvailableResponse, error)
 }
 
 type connectionClient struct {
@@ -98,6 +99,15 @@ func (c *connectionClient) RotateSecret(ctx context.Context, in *RotateSecretReq
 	return out, nil
 }
 
+func (c *connectionClient) ConnectionAvailable(ctx context.Context, in *ConnectionAvailableRequest, opts ...grpc.CallOption) (*ConnectionAvailableResponse, error) {
+	out := new(ConnectionAvailableResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.connection.v1.Connection/ConnectionAvailable", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConnectionServer is the server API for Connection service.
 // All implementations should embed UnimplementedConnectionServer
 // for forward compatibility
@@ -109,6 +119,7 @@ type ConnectionServer interface {
 	DeleteConnection(context.Context, *DeleteConnectionRequest) (*DeleteConnectionResponse, error)
 	VerifyConnection(context.Context, *VerifyConnectionRequest) (*VerifyConnectionResponse, error)
 	RotateSecret(context.Context, *RotateSecretRequest) (*RotateSecretResponse, error)
+	ConnectionAvailable(context.Context, *ConnectionAvailableRequest) (*ConnectionAvailableResponse, error)
 }
 
 // UnimplementedConnectionServer should be embedded to have forward compatible implementations.
@@ -135,6 +146,9 @@ func (UnimplementedConnectionServer) VerifyConnection(context.Context, *VerifyCo
 }
 func (UnimplementedConnectionServer) RotateSecret(context.Context, *RotateSecretRequest) (*RotateSecretResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RotateSecret not implemented")
+}
+func (UnimplementedConnectionServer) ConnectionAvailable(context.Context, *ConnectionAvailableRequest) (*ConnectionAvailableResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConnectionAvailable not implemented")
 }
 
 // UnsafeConnectionServer may be embedded to opt out of forward compatibility for this service.
@@ -274,6 +288,24 @@ func _Connection_RotateSecret_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Connection_ConnectionAvailable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConnectionAvailableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionServer).ConnectionAvailable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.connection.v1.Connection/ConnectionAvailable",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionServer).ConnectionAvailable(ctx, req.(*ConnectionAvailableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Connection_ServiceDesc is the grpc.ServiceDesc for Connection service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,6 +340,10 @@ var Connection_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RotateSecret",
 			Handler:    _Connection_RotateSecret_Handler,
+		},
+		{
+			MethodName: "ConnectionAvailable",
+			Handler:    _Connection_ConnectionAvailable_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
