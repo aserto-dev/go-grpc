@@ -25,6 +25,7 @@ type RegistryClient interface {
 	ListRegistryRepoDigests(ctx context.Context, in *ListRegistryRepoDigestsRequest, opts ...grpc.CallOption) (*ListRegistryRepoDigestsResponse, error)
 	GetRegistryRepoTag(ctx context.Context, in *GetRegistryRepoTagRequest, opts ...grpc.CallOption) (*GetRegistryRepoTagResponse, error)
 	CreateRegistryRepo(ctx context.Context, in *CreateRegistryRepoRequest, opts ...grpc.CallOption) (*CreateRegistryRepoResponse, error)
+	RegistryRepoAvailable(ctx context.Context, in *RegistryRepoAvailableRequest, opts ...grpc.CallOption) (*RegistryRepoAvailableResponse, error)
 }
 
 type registryClient struct {
@@ -98,6 +99,15 @@ func (c *registryClient) CreateRegistryRepo(ctx context.Context, in *CreateRegis
 	return out, nil
 }
 
+func (c *registryClient) RegistryRepoAvailable(ctx context.Context, in *RegistryRepoAvailableRequest, opts ...grpc.CallOption) (*RegistryRepoAvailableResponse, error) {
+	out := new(RegistryRepoAvailableResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/RegistryRepoAvailable", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
@@ -109,6 +119,7 @@ type RegistryServer interface {
 	ListRegistryRepoDigests(context.Context, *ListRegistryRepoDigestsRequest) (*ListRegistryRepoDigestsResponse, error)
 	GetRegistryRepoTag(context.Context, *GetRegistryRepoTagRequest) (*GetRegistryRepoTagResponse, error)
 	CreateRegistryRepo(context.Context, *CreateRegistryRepoRequest) (*CreateRegistryRepoResponse, error)
+	RegistryRepoAvailable(context.Context, *RegistryRepoAvailableRequest) (*RegistryRepoAvailableResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -135,6 +146,9 @@ func (UnimplementedRegistryServer) GetRegistryRepoTag(context.Context, *GetRegis
 }
 func (UnimplementedRegistryServer) CreateRegistryRepo(context.Context, *CreateRegistryRepoRequest) (*CreateRegistryRepoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRegistryRepo not implemented")
+}
+func (UnimplementedRegistryServer) RegistryRepoAvailable(context.Context, *RegistryRepoAvailableRequest) (*RegistryRepoAvailableResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegistryRepoAvailable not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -274,6 +288,24 @@ func _Registry_CreateRegistryRepo_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_RegistryRepoAvailable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistryRepoAvailableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).RegistryRepoAvailable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.registry.v1.Registry/RegistryRepoAvailable",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).RegistryRepoAvailable(ctx, req.(*RegistryRepoAvailableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,6 +340,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRegistryRepo",
 			Handler:    _Registry_CreateRegistryRepo_Handler,
+		},
+		{
+			MethodName: "RegistryRepoAvailable",
+			Handler:    _Registry_RegistryRepoAvailable_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
