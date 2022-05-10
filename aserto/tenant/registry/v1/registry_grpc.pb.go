@@ -27,6 +27,7 @@ type RegistryClient interface {
 	CreateRegistryRepo(ctx context.Context, in *CreateRegistryRepoRequest, opts ...grpc.CallOption) (*CreateRegistryRepoResponse, error)
 	RegistryRepoAvailable(ctx context.Context, in *RegistryRepoAvailableRequest, opts ...grpc.CallOption) (*RegistryRepoAvailableResponse, error)
 	ValidPolicyRegistryRepoTag(ctx context.Context, in *ValidPolicyRegistryRepoTagRequest, opts ...grpc.CallOption) (*ValidPolicyRegistryRepoTagResponse, error)
+	CloneRepo(ctx context.Context, in *CloneRepoRequest, opts ...grpc.CallOption) (*CloneRepoResponse, error)
 }
 
 type registryClient struct {
@@ -118,6 +119,15 @@ func (c *registryClient) ValidPolicyRegistryRepoTag(ctx context.Context, in *Val
 	return out, nil
 }
 
+func (c *registryClient) CloneRepo(ctx context.Context, in *CloneRepoRequest, opts ...grpc.CallOption) (*CloneRepoResponse, error) {
+	out := new(CloneRepoResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.registry.v1.Registry/CloneRepo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegistryServer is the server API for Registry service.
 // All implementations should embed UnimplementedRegistryServer
 // for forward compatibility
@@ -131,6 +141,7 @@ type RegistryServer interface {
 	CreateRegistryRepo(context.Context, *CreateRegistryRepoRequest) (*CreateRegistryRepoResponse, error)
 	RegistryRepoAvailable(context.Context, *RegistryRepoAvailableRequest) (*RegistryRepoAvailableResponse, error)
 	ValidPolicyRegistryRepoTag(context.Context, *ValidPolicyRegistryRepoTagRequest) (*ValidPolicyRegistryRepoTagResponse, error)
+	CloneRepo(context.Context, *CloneRepoRequest) (*CloneRepoResponse, error)
 }
 
 // UnimplementedRegistryServer should be embedded to have forward compatible implementations.
@@ -163,6 +174,9 @@ func (UnimplementedRegistryServer) RegistryRepoAvailable(context.Context, *Regis
 }
 func (UnimplementedRegistryServer) ValidPolicyRegistryRepoTag(context.Context, *ValidPolicyRegistryRepoTagRequest) (*ValidPolicyRegistryRepoTagResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidPolicyRegistryRepoTag not implemented")
+}
+func (UnimplementedRegistryServer) CloneRepo(context.Context, *CloneRepoRequest) (*CloneRepoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CloneRepo not implemented")
 }
 
 // UnsafeRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -338,6 +352,24 @@ func _Registry_ValidPolicyRegistryRepoTag_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Registry_CloneRepo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CloneRepoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegistryServer).CloneRepo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.registry.v1.Registry/CloneRepo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegistryServer).CloneRepo(ctx, req.(*CloneRepoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Registry_ServiceDesc is the grpc.ServiceDesc for Registry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -380,6 +412,10 @@ var Registry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ValidPolicyRegistryRepoTag",
 			Handler:    _Registry_ValidPolicyRegistryRepoTag_Handler,
+		},
+		{
+			MethodName: "CloneRepo",
+			Handler:    _Registry_CloneRepo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
