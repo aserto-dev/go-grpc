@@ -44,6 +44,20 @@ func Generate() error {
 	return gen(bufImage, bufImage)
 }
 
+// Generate go code
+func GenerateTenant() error {
+	bufImage := "buf.build/aserto-dev/tenant"
+
+	tag, err := buf.GetLatestTag(bufImage)
+	if err != nil {
+		fmt.Println("Could not retrieve tags, using latest")
+	} else {
+		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
+	}
+
+	return gen(bufImage, bufImage)
+}
+
 // Generates from a dev build.
 func GenerateDev() error {
 	err := BuildDev()
