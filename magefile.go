@@ -140,6 +140,13 @@ func getClientFiles(fileSources string) ([]string, error) {
 		return clientFiles, err
 	}
 
+	protoFilesV2, err := fsutil.Glob(filepath.Join(bufExportDir, "tenant", "**", "*.proto"), excludePattern)
+	if err != nil {
+		return clientFiles, err
+	}
+
+	protoFiles = append(protoFiles, protoFilesV2...)
+
 	for _, protoFile := range protoFiles {
 		clientFiles = append(clientFiles, strings.TrimPrefix(protoFile, bufExportDir+string(filepath.Separator)))
 	}
