@@ -156,5 +156,9 @@ func getClientFiles(fileSources string) ([]string, error) {
 
 // Removes generated files
 func Clean() error {
-	return os.RemoveAll("aserto")
+	err := os.RemoveAll("aserto")
+	if err != nil {
+		return err
+	}
+	return os.RemoveAll("tenant")
 }
