@@ -44,20 +44,6 @@ func Generate() error {
 	return gen(bufImage, bufImage)
 }
 
-// Generate go code
-func GenerateTenant() error {
-	bufImage := "buf.build/aserto-dev/tenant"
-
-	tag, err := buf.GetLatestTag(bufImage)
-	if err != nil {
-		fmt.Println("Could not retrieve tags, using latest")
-	} else {
-		bufImage = fmt.Sprintf("%s:%s", bufImage, tag.Name)
-	}
-
-	return gen(bufImage, bufImage)
-}
-
 // Generate relay
 func GenerateRelay() error {
 	bufImage := "buf.build/aserto-dev/relay"
@@ -154,13 +140,6 @@ func getClientFiles(fileSources string) ([]string, error) {
 		return clientFiles, err
 	}
 
-	protoFilesV2, err := fsutil.Glob(filepath.Join(bufExportDir, "tenant", "**", "*.proto"), excludePattern)
-	if err != nil {
-		return clientFiles, err
-	}
-
-	protoFiles = append(protoFiles, protoFilesV2...)
-
 	for _, protoFile := range protoFiles {
 		clientFiles = append(clientFiles, strings.TrimPrefix(protoFile, bufExportDir+string(filepath.Separator)))
 	}
@@ -170,9 +149,5 @@ func getClientFiles(fileSources string) ([]string, error) {
 
 // Removes generated files
 func Clean() error {
-	err := os.RemoveAll("aserto")
-	if err != nil {
-		return err
-	}
-	return os.RemoveAll("tenant")
+	return os.RemoveAll("aserto")
 }
