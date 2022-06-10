@@ -23,6 +23,7 @@ type PolicyClient interface {
 	DeletePolicyRef(ctx context.Context, in *DeletePolicyRefRequest, opts ...grpc.CallOption) (*DeletePolicyRefResponse, error)
 	UpdatePolicyRef(ctx context.Context, in *UpdatePolicyRefRequest, opts ...grpc.CallOption) (*UpdatePolicyRefResponse, error)
 	OPADiscovery(ctx context.Context, in *OPADiscoveryRequest, opts ...grpc.CallOption) (*OPADiscoveryResponse, error)
+	OPAInstanceDiscovery(ctx context.Context, in *OPAInstanceDiscoveryRequest, opts ...grpc.CallOption) (*OPAInstanceDiscoveryResponse, error)
 }
 
 type policyClient struct {
@@ -78,6 +79,15 @@ func (c *policyClient) OPADiscovery(ctx context.Context, in *OPADiscoveryRequest
 	return out, nil
 }
 
+func (c *policyClient) OPAInstanceDiscovery(ctx context.Context, in *OPAInstanceDiscoveryRequest, opts ...grpc.CallOption) (*OPAInstanceDiscoveryResponse, error) {
+	out := new(OPAInstanceDiscoveryResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.policy.v1.Policy/OPAInstanceDiscovery", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PolicyServer is the server API for Policy service.
 // All implementations should embed UnimplementedPolicyServer
 // for forward compatibility
@@ -87,6 +97,7 @@ type PolicyServer interface {
 	DeletePolicyRef(context.Context, *DeletePolicyRefRequest) (*DeletePolicyRefResponse, error)
 	UpdatePolicyRef(context.Context, *UpdatePolicyRefRequest) (*UpdatePolicyRefResponse, error)
 	OPADiscovery(context.Context, *OPADiscoveryRequest) (*OPADiscoveryResponse, error)
+	OPAInstanceDiscovery(context.Context, *OPAInstanceDiscoveryRequest) (*OPAInstanceDiscoveryResponse, error)
 }
 
 // UnimplementedPolicyServer should be embedded to have forward compatible implementations.
@@ -107,6 +118,9 @@ func (UnimplementedPolicyServer) UpdatePolicyRef(context.Context, *UpdatePolicyR
 }
 func (UnimplementedPolicyServer) OPADiscovery(context.Context, *OPADiscoveryRequest) (*OPADiscoveryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OPADiscovery not implemented")
+}
+func (UnimplementedPolicyServer) OPAInstanceDiscovery(context.Context, *OPAInstanceDiscoveryRequest) (*OPAInstanceDiscoveryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OPAInstanceDiscovery not implemented")
 }
 
 // UnsafePolicyServer may be embedded to opt out of forward compatibility for this service.
@@ -210,6 +224,24 @@ func _Policy_OPADiscovery_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Policy_OPAInstanceDiscovery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OPAInstanceDiscoveryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PolicyServer).OPAInstanceDiscovery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.policy.v1.Policy/OPAInstanceDiscovery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PolicyServer).OPAInstanceDiscovery(ctx, req.(*OPAInstanceDiscoveryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Policy_ServiceDesc is the grpc.ServiceDesc for Policy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -236,6 +268,10 @@ var Policy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OPADiscovery",
 			Handler:    _Policy_OPADiscovery_Handler,
+		},
+		{
+			MethodName: "OPAInstanceDiscovery",
+			Handler:    _Policy_OPAInstanceDiscovery_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

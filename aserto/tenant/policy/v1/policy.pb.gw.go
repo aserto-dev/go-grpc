@@ -291,6 +291,78 @@ func local_request_Policy_OPADiscovery_0(ctx context.Context, marshaler runtime.
 
 }
 
+func request_Policy_OPAInstanceDiscovery_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq OPAInstanceDiscoveryRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["policy_name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_name")
+	}
+
+	protoReq.PolicyName, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_name", err)
+	}
+
+	val, ok = pathParams["instance_label"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "instance_label")
+	}
+
+	protoReq.InstanceLabel, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "instance_label", err)
+	}
+
+	msg, err := client.OPAInstanceDiscovery(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Policy_OPAInstanceDiscovery_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq OPAInstanceDiscoveryRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["policy_name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_name")
+	}
+
+	protoReq.PolicyName, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_name", err)
+	}
+
+	val, ok = pathParams["instance_label"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "instance_label")
+	}
+
+	protoReq.InstanceLabel, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "instance_label", err)
+	}
+
+	msg, err := server.OPAInstanceDiscovery(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterPolicyHandlerServer registers the http handlers for service Policy to "mux".
 // UnaryRPC     :call PolicyServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -409,6 +481,29 @@ func RegisterPolicyHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		}
 
 		forward_Policy_OPADiscovery_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Policy_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.policy.v1.Policy/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v1/discovery/{policy_name}/{instance_label}/opa"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Policy_OPAInstanceDiscovery_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Policy_OPAInstanceDiscovery_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -553,6 +648,26 @@ func RegisterPolicyHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 
 	})
 
+	mux.Handle("GET", pattern_Policy_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.policy.v1.Policy/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v1/discovery/{policy_name}/{instance_label}/opa"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Policy_OPAInstanceDiscovery_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Policy_OPAInstanceDiscovery_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -566,6 +681,8 @@ var (
 	pattern_Policy_UpdatePolicyRef_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "policies", "policy_ref.id"}, ""))
 
 	pattern_Policy_OPADiscovery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 2, 6}, []string{"api", "v1", "tenant", "policies", "policy_id", "opa", "discovery"}, ""))
+
+	pattern_Policy_OPAInstanceDiscovery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "discovery", "policy_name", "instance_label", "opa"}, ""))
 )
 
 var (
@@ -578,4 +695,6 @@ var (
 	forward_Policy_UpdatePolicyRef_0 = runtime.ForwardResponseMessage
 
 	forward_Policy_OPADiscovery_0 = runtime.ForwardResponseMessage
+
+	forward_Policy_OPAInstanceDiscovery_0 = runtime.ForwardResponseMessage
 )

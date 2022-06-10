@@ -77,13 +77,13 @@ type Instance struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PolicyId        string                 `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
-	Label           string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
-	Tag             string                 `protobuf:"bytes,3,opt,name=tag,proto3" json:"tag,omitempty"`
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	InstanceType    InstanceType           `protobuf:"varint,6,opt,name=instance_type,json=instanceType,proto3,enum=aserto.api.v2.InstanceType" json:"instance_type,omitempty"`
-	DecisionLogging *bool                  `protobuf:"varint,7,opt,name=decision_logging,json=decisionLogging,proto3,oneof" json:"decision_logging,omitempty"`
+	PolicyId        string                 `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                              // Policy ID.
+	Label           string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`                                                                    // Unique human-readable label for the instance.
+	Tag             string                 `protobuf:"bytes,3,opt,name=tag,proto3" json:"tag,omitempty"`                                                                        // Default repository tag to be run by the instance.
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                           // Timestamp of when the instance was created.
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                           // Timestamp of when the instance was last updated.
+	InstanceType    InstanceType           `protobuf:"varint,6,opt,name=instance_type,json=instanceType,proto3,enum=aserto.api.v2.InstanceType" json:"instance_type,omitempty"` // Type of instance (hosted or satellite).
+	DecisionLogging *bool                  `protobuf:"varint,7,opt,name=decision_logging,json=decisionLogging,proto3,oneof" json:"decision_logging,omitempty"`                  // Whether to enable decision logging.
 }
 
 func (x *Instance) Reset() {
