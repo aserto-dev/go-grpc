@@ -69,12 +69,7 @@ func request_Policy_GetPolicies_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	if protoReq.Policy == nil {
-		protoReq.Policy = &GetPoliciesRequest_Id{}
-	} else if _, ok := protoReq.Policy.(*GetPoliciesRequest_Id); !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "expect type: *GetPoliciesRequest_Id, but: %t\n", protoReq.Policy)
-	}
-	protoReq.Policy.(*GetPoliciesRequest_Id).Id, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -107,12 +102,7 @@ func local_request_Policy_GetPolicies_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	if protoReq.Policy == nil {
-		protoReq.Policy = &GetPoliciesRequest_Id{}
-	} else if _, ok := protoReq.Policy.(*GetPoliciesRequest_Id); !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "expect type: *GetPoliciesRequest_Id, but: %t\n", protoReq.Policy)
-	}
-	protoReq.Policy.(*GetPoliciesRequest_Id).Id, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
