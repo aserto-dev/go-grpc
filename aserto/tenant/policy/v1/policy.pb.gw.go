@@ -239,6 +239,10 @@ func local_request_Policy_UpdatePolicyRef_0(ctx context.Context, marshaler runti
 
 }
 
+var (
+	filter_Policy_OPADiscovery_0 = &utilities.DoubleArray{Encoding: map[string]int{"policy_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
 func request_Policy_OPADiscovery_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq OPADiscoveryRequest
 	var metadata runtime.ServerMetadata
@@ -258,6 +262,13 @@ func request_Policy_OPADiscovery_0(ctx context.Context, marshaler runtime.Marsha
 	protoReq.PolicyId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Policy_OPADiscovery_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.OPADiscovery(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -284,6 +295,13 @@ func local_request_Policy_OPADiscovery_0(ctx context.Context, marshaler runtime.
 	protoReq.PolicyId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Policy_OPADiscovery_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.OPADiscovery(ctx, &protoReq)
