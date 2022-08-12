@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PolicyStateClient interface {
+	CreatePolicyState(ctx context.Context, in *CreatePolicyStateRequest, opts ...grpc.CallOption) (*CreatePolicyStateResponse, error)
 	GetPolicyState(ctx context.Context, in *GetPolicyStateRequest, opts ...grpc.CallOption) (*GetPolicyStateResponse, error)
 	SetPolicyState(ctx context.Context, in *SetPolicyStateRequest, opts ...grpc.CallOption) (*SetPolicyStateResponse, error)
 }
@@ -28,6 +29,15 @@ type policyStateClient struct {
 
 func NewPolicyStateClient(cc grpc.ClientConnInterface) PolicyStateClient {
 	return &policyStateClient{cc}
+}
+
+func (c *policyStateClient) CreatePolicyState(ctx context.Context, in *CreatePolicyStateRequest, opts ...grpc.CallOption) (*CreatePolicyStateResponse, error) {
+	out := new(CreatePolicyStateResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.v2.PolicyState/CreatePolicyState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *policyStateClient) GetPolicyState(ctx context.Context, in *GetPolicyStateRequest, opts ...grpc.CallOption) (*GetPolicyStateResponse, error) {
@@ -52,6 +62,7 @@ func (c *policyStateClient) SetPolicyState(ctx context.Context, in *SetPolicySta
 // All implementations should embed UnimplementedPolicyStateServer
 // for forward compatibility
 type PolicyStateServer interface {
+	CreatePolicyState(context.Context, *CreatePolicyStateRequest) (*CreatePolicyStateResponse, error)
 	GetPolicyState(context.Context, *GetPolicyStateRequest) (*GetPolicyStateResponse, error)
 	SetPolicyState(context.Context, *SetPolicyStateRequest) (*SetPolicyStateResponse, error)
 }
@@ -60,6 +71,9 @@ type PolicyStateServer interface {
 type UnimplementedPolicyStateServer struct {
 }
 
+func (UnimplementedPolicyStateServer) CreatePolicyState(context.Context, *CreatePolicyStateRequest) (*CreatePolicyStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicyState not implemented")
+}
 func (UnimplementedPolicyStateServer) GetPolicyState(context.Context, *GetPolicyStateRequest) (*GetPolicyStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPolicyState not implemented")
 }
@@ -76,6 +90,24 @@ type UnsafePolicyStateServer interface {
 
 func RegisterPolicyStateServer(s grpc.ServiceRegistrar, srv PolicyStateServer) {
 	s.RegisterService(&PolicyState_ServiceDesc, srv)
+}
+
+func _PolicyState_CreatePolicyState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePolicyStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PolicyStateServer).CreatePolicyState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.v2.PolicyState/CreatePolicyState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PolicyStateServer).CreatePolicyState(ctx, req.(*CreatePolicyStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _PolicyState_GetPolicyState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -121,6 +153,10 @@ var PolicyState_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "aserto.tenant.v2.PolicyState",
 	HandlerType: (*PolicyStateServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreatePolicyState",
+			Handler:    _PolicyState_CreatePolicyState_Handler,
+		},
 		{
 			MethodName: "GetPolicyState",
 			Handler:    _PolicyState_GetPolicyState_Handler,
