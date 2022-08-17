@@ -23,6 +23,7 @@ type PolicyClient interface {
 	DeletePolicy(ctx context.Context, in *DeletePolicyRequest, opts ...grpc.CallOption) (*DeletePolicyResponse, error)
 	UpdatePolicy(ctx context.Context, in *UpdatePolicyRequest, opts ...grpc.CallOption) (*UpdatePolicyResponse, error)
 	GetPolicy(ctx context.Context, in *GetPolicyRequest, opts ...grpc.CallOption) (*GetPolicyResponse, error)
+	PolicyNameAvailable(ctx context.Context, in *PolicyNameAvailableRequest, opts ...grpc.CallOption) (*PolicyNameAvailableResponse, error)
 }
 
 type policyClient struct {
@@ -78,6 +79,15 @@ func (c *policyClient) GetPolicy(ctx context.Context, in *GetPolicyRequest, opts
 	return out, nil
 }
 
+func (c *policyClient) PolicyNameAvailable(ctx context.Context, in *PolicyNameAvailableRequest, opts ...grpc.CallOption) (*PolicyNameAvailableResponse, error) {
+	out := new(PolicyNameAvailableResponse)
+	err := c.cc.Invoke(ctx, "/aserto.tenant.v2.Policy/PolicyNameAvailable", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PolicyServer is the server API for Policy service.
 // All implementations should embed UnimplementedPolicyServer
 // for forward compatibility
@@ -87,6 +97,7 @@ type PolicyServer interface {
 	DeletePolicy(context.Context, *DeletePolicyRequest) (*DeletePolicyResponse, error)
 	UpdatePolicy(context.Context, *UpdatePolicyRequest) (*UpdatePolicyResponse, error)
 	GetPolicy(context.Context, *GetPolicyRequest) (*GetPolicyResponse, error)
+	PolicyNameAvailable(context.Context, *PolicyNameAvailableRequest) (*PolicyNameAvailableResponse, error)
 }
 
 // UnimplementedPolicyServer should be embedded to have forward compatible implementations.
@@ -107,6 +118,9 @@ func (UnimplementedPolicyServer) UpdatePolicy(context.Context, *UpdatePolicyRequ
 }
 func (UnimplementedPolicyServer) GetPolicy(context.Context, *GetPolicyRequest) (*GetPolicyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPolicy not implemented")
+}
+func (UnimplementedPolicyServer) PolicyNameAvailable(context.Context, *PolicyNameAvailableRequest) (*PolicyNameAvailableResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PolicyNameAvailable not implemented")
 }
 
 // UnsafePolicyServer may be embedded to opt out of forward compatibility for this service.
@@ -210,6 +224,24 @@ func _Policy_GetPolicy_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Policy_PolicyNameAvailable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PolicyNameAvailableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PolicyServer).PolicyNameAvailable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/aserto.tenant.v2.Policy/PolicyNameAvailable",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PolicyServer).PolicyNameAvailable(ctx, req.(*PolicyNameAvailableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Policy_ServiceDesc is the grpc.ServiceDesc for Policy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -236,6 +268,10 @@ var Policy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPolicy",
 			Handler:    _Policy_GetPolicy_Handler,
+		},
+		{
+			MethodName: "PolicyNameAvailable",
+			Handler:    _Policy_PolicyNameAvailable_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
