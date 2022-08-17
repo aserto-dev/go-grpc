@@ -35,21 +35,12 @@ func request_Repository_GetRepository_0(ctx context.Context, marshaler runtime.M
 	var protoReq GetRepositoryRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_id")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	protoReq.PolicyId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.GetRepository(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -61,21 +52,12 @@ func local_request_Repository_GetRepository_0(ctx context.Context, marshaler run
 	var protoReq GetRepositoryRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_id")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	protoReq.PolicyId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.GetRepository(ctx, &protoReq)
@@ -91,7 +73,7 @@ func request_Repository_CreateRepository_0(ctx context.Context, marshaler runtim
 	if berr != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq.Repository); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -108,7 +90,7 @@ func local_request_Repository_CreateRepository_0(ctx context.Context, marshaler 
 	if berr != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq.Repository); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -121,21 +103,12 @@ func request_Repository_DeleteRepository_0(ctx context.Context, marshaler runtim
 	var protoReq DeleteRepositoryRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_id")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	protoReq.PolicyId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.DeleteRepository(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -147,31 +120,18 @@ func local_request_Repository_DeleteRepository_0(ctx context.Context, marshaler 
 	var protoReq DeleteRepositoryRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_id")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	protoReq.PolicyId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_id", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.DeleteRepository(ctx, &protoReq)
 	return msg, metadata, err
 
 }
-
-var (
-	filter_Repository_UpdateRepository_0 = &utilities.DoubleArray{Encoding: map[string]int{"repository": 0, "policy_id": 1}, Base: []int{1, 2, 1, 0, 0}, Check: []int{0, 1, 2, 3, 2}}
-)
 
 func request_Repository_UpdateRepository_0(ctx context.Context, marshaler runtime.Marshaler, client RepositoryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateRepositoryRequest
@@ -181,31 +141,7 @@ func request_Repository_UpdateRepository_0(ctx context.Context, marshaler runtim
 	if berr != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq.Repository); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["repository.policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.policy_id")
-	}
-
-	err = runtime.PopulateFieldFromPath(&protoReq, "repository.policy_id", val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.policy_id", err)
-	}
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Repository_UpdateRepository_0); err != nil {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -222,31 +158,7 @@ func local_request_Repository_UpdateRepository_0(ctx context.Context, marshaler 
 	if berr != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq.Repository); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["repository.policy_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repository.policy_id")
-	}
-
-	err = runtime.PopulateFieldFromPath(&protoReq, "repository.policy_id", val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repository.policy_id", err)
-	}
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Repository_UpdateRepository_0); err != nil {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -261,13 +173,13 @@ func local_request_Repository_UpdateRepository_0(ctx context.Context, marshaler 
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterRepositoryHandlerFromEndpoint instead.
 func RegisterRepositoryHandlerServer(ctx context.Context, mux *runtime.ServeMux, server RepositoryServer) error {
 
-	mux.Handle("GET", pattern_Repository_GetRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_GetRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/GetRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{policy_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/GetRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/GetRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -290,7 +202,7 @@ func RegisterRepositoryHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/CreateRepository", runtime.WithHTTPPathPattern("/api/v2/repositories"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/CreateRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/CreateRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -307,13 +219,13 @@ func RegisterRepositoryHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("DELETE", pattern_Repository_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/DeleteRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{policy_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/DeleteRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/DeleteRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -330,13 +242,13 @@ func RegisterRepositoryHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("PATCH", pattern_Repository_UpdateRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_UpdateRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/UpdateRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{repository.policy_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.v2.Repository/UpdateRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/UpdateRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -394,11 +306,11 @@ func RegisterRepositoryHandler(ctx context.Context, mux *runtime.ServeMux, conn 
 // "RepositoryClient" to call the correct interceptors.
 func RegisterRepositoryHandlerClient(ctx context.Context, mux *runtime.ServeMux, client RepositoryClient) error {
 
-	mux.Handle("GET", pattern_Repository_GetRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_GetRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/GetRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{policy_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/GetRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/GetRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -418,7 +330,7 @@ func RegisterRepositoryHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/CreateRepository", runtime.WithHTTPPathPattern("/api/v2/repositories"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/CreateRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/CreateRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -434,11 +346,11 @@ func RegisterRepositoryHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("DELETE", pattern_Repository_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_DeleteRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/DeleteRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{policy_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/DeleteRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/DeleteRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -454,11 +366,11 @@ func RegisterRepositoryHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
-	mux.Handle("PATCH", pattern_Repository_UpdateRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Repository_UpdateRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/UpdateRepository", runtime.WithHTTPPathPattern("/api/v2/repositories/{repository.policy_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.v2.Repository/UpdateRepository", runtime.WithHTTPPathPattern("/aserto.tenant.v2.Repository/UpdateRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -478,13 +390,13 @@ func RegisterRepositoryHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 }
 
 var (
-	pattern_Repository_GetRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v2", "repositories", "policy_id"}, ""))
+	pattern_Repository_GetRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.v2.Repository", "GetRepository"}, ""))
 
-	pattern_Repository_CreateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v2", "repositories"}, ""))
+	pattern_Repository_CreateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.v2.Repository", "CreateRepository"}, ""))
 
-	pattern_Repository_DeleteRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v2", "repositories", "policy_id"}, ""))
+	pattern_Repository_DeleteRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.v2.Repository", "DeleteRepository"}, ""))
 
-	pattern_Repository_UpdateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v2", "repositories", "repository.policy_id"}, ""))
+	pattern_Repository_UpdateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"aserto.tenant.v2.Repository", "UpdateRepository"}, ""))
 )
 
 var (
