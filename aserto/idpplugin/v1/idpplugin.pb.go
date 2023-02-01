@@ -183,6 +183,7 @@ type ImportRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Data:
+	//
 	//	*ImportRequest_Config
 	//	*ImportRequest_User
 	//	*ImportRequest_UserExt
@@ -379,6 +380,7 @@ type ExportResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Data:
+	//
 	//	*ExportResponse_User
 	//	*ExportResponse_UserExt
 	//	*ExportResponse_Error
@@ -473,6 +475,7 @@ type DeleteRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Data:
+	//
 	//	*DeleteRequest_Config
 	//	*DeleteRequest_UserId
 	Data isDeleteRequest_Data `protobuf_oneof:"data"`
