@@ -172,6 +172,7 @@ type Command struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Data:
+	//
 	//	*Command_Discovery
 	//	*Command_SyncEdgeDirectory
 	Data isCommand_Data `protobuf_oneof:"data"`
