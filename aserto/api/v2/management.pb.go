@@ -20,6 +20,62 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type SyncMode int32
+
+const (
+	// nothing selected (default initialization value)
+	SyncMode_SYNC_MODE_UNKNOWN SyncMode = 0
+	// full sync, requests full export of source, contains new and updated elements only
+	SyncMode_SYNC_MODE_FULL SyncMode = 1
+	// full sync with differential, removing items deleted in source from target.
+	SyncMode_SYNC_MODE_DIFF SyncMode = 2
+	// watermark sync, pulls all new and updated data since last watermark.
+	SyncMode_SYNC_MODE_WATERMARK SyncMode = 4
+)
+
+// Enum value maps for SyncMode.
+var (
+	SyncMode_name = map[int32]string{
+		0: "SYNC_MODE_UNKNOWN",
+		1: "SYNC_MODE_FULL",
+		2: "SYNC_MODE_DIFF",
+		4: "SYNC_MODE_WATERMARK",
+	}
+	SyncMode_value = map[string]int32{
+		"SYNC_MODE_UNKNOWN":   0,
+		"SYNC_MODE_FULL":      1,
+		"SYNC_MODE_DIFF":      2,
+		"SYNC_MODE_WATERMARK": 4,
+	}
+)
+
+func (x SyncMode) Enum() *SyncMode {
+	p := new(SyncMode)
+	*p = x
+	return p
+}
+
+func (x SyncMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SyncMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_aserto_api_v2_management_proto_enumTypes[0].Descriptor()
+}
+
+func (SyncMode) Type() protoreflect.EnumType {
+	return &file_aserto_api_v2_management_proto_enumTypes[0]
+}
+
+func (x SyncMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SyncMode.Descriptor instead.
+func (SyncMode) EnumDescriptor() ([]byte, []int) {
+	return file_aserto_api_v2_management_proto_rawDescGZIP(), []int{0}
+}
+
 // InstanceInfo has data about a running aserto instance that is registered with the control
 // plane.
 type InstanceInfo struct {
@@ -291,6 +347,9 @@ type SyncEdgeDirectoryCommand struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	// sync mode
+	Mode SyncMode `protobuf:"varint,1,opt,name=mode,proto3,enum=aserto.api.v2.SyncMode" json:"mode,omitempty"`
 }
 
 func (x *SyncEdgeDirectoryCommand) Reset() {
@@ -323,6 +382,13 @@ func (x *SyncEdgeDirectoryCommand) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SyncEdgeDirectoryCommand.ProtoReflect.Descriptor instead.
 func (*SyncEdgeDirectoryCommand) Descriptor() ([]byte, []int) {
 	return file_aserto_api_v2_management_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SyncEdgeDirectoryCommand) GetMode() SyncMode {
+	if x != nil {
+		return x.Mode
+	}
+	return SyncMode_SYNC_MODE_UNKNOWN
 }
 
 var File_aserto_api_v2_management_proto protoreflect.FileDescriptor
@@ -362,14 +428,23 @@ var file_aserto_api_v2_management_proto_rawDesc = []byte{
 	0x6f, 0x72, 0x79, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x48, 0x00, 0x52, 0x11, 0x73, 0x79,
 	0x6e, 0x63, 0x45, 0x64, 0x67, 0x65, 0x44, 0x69, 0x72, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x79, 0x42,
 	0x06, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x12, 0x0a, 0x10, 0x44, 0x69, 0x73, 0x63, 0x6f,
-	0x76, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x22, 0x1a, 0x0a, 0x18, 0x53,
+	0x76, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x22, 0x47, 0x0a, 0x18, 0x53,
 	0x79, 0x6e, 0x63, 0x45, 0x64, 0x67, 0x65, 0x44, 0x69, 0x72, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x79,
-	0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x42, 0x41, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x73, 0x65, 0x72, 0x74, 0x6f, 0x2d, 0x64, 0x65, 0x76,
-	0x2f, 0x67, 0x6f, 0x2d, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x61, 0x73, 0x65, 0x72, 0x74, 0x6f, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x76, 0x32, 0x3b, 0x61, 0x70, 0x69, 0xaa, 0x02, 0x0d, 0x41, 0x73, 0x65,
-	0x72, 0x74, 0x6f, 0x2e, 0x41, 0x50, 0x49, 0x2e, 0x56, 0x32, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x12, 0x2b, 0x0a, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e, 0x61, 0x73, 0x65, 0x72, 0x74, 0x6f, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x79, 0x6e, 0x63, 0x4d, 0x6f, 0x64, 0x65, 0x52, 0x04,
+	0x6d, 0x6f, 0x64, 0x65, 0x2a, 0x62, 0x0a, 0x08, 0x53, 0x79, 0x6e, 0x63, 0x4d, 0x6f, 0x64, 0x65,
+	0x12, 0x15, 0x0a, 0x11, 0x53, 0x59, 0x4e, 0x43, 0x5f, 0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x55, 0x4e,
+	0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x12, 0x0a, 0x0e, 0x53, 0x59, 0x4e, 0x43, 0x5f,
+	0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x46, 0x55, 0x4c, 0x4c, 0x10, 0x01, 0x12, 0x12, 0x0a, 0x0e, 0x53,
+	0x59, 0x4e, 0x43, 0x5f, 0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x44, 0x49, 0x46, 0x46, 0x10, 0x02, 0x12,
+	0x17, 0x0a, 0x13, 0x53, 0x59, 0x4e, 0x43, 0x5f, 0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x57, 0x41, 0x54,
+	0x45, 0x52, 0x4d, 0x41, 0x52, 0x4b, 0x10, 0x04, 0x42, 0x41, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x73, 0x65, 0x72, 0x74, 0x6f, 0x2d, 0x64, 0x65,
+	0x76, 0x2f, 0x67, 0x6f, 0x2d, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x61, 0x73, 0x65, 0x72, 0x74, 0x6f,
+	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x32, 0x3b, 0x61, 0x70, 0x69, 0xaa, 0x02, 0x0d, 0x41, 0x73,
+	0x65, 0x72, 0x74, 0x6f, 0x2e, 0x41, 0x50, 0x49, 0x2e, 0x56, 0x32, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -384,23 +459,26 @@ func file_aserto_api_v2_management_proto_rawDescGZIP() []byte {
 	return file_aserto_api_v2_management_proto_rawDescData
 }
 
+var file_aserto_api_v2_management_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_aserto_api_v2_management_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_aserto_api_v2_management_proto_goTypes = []interface{}{
-	(*InstanceInfo)(nil),             // 0: aserto.api.v2.InstanceInfo
-	(*InstanceRegistration)(nil),     // 1: aserto.api.v2.InstanceRegistration
-	(*Command)(nil),                  // 2: aserto.api.v2.Command
-	(*DiscoveryCommand)(nil),         // 3: aserto.api.v2.DiscoveryCommand
-	(*SyncEdgeDirectoryCommand)(nil), // 4: aserto.api.v2.SyncEdgeDirectoryCommand
+	(SyncMode)(0),                    // 0: aserto.api.v2.SyncMode
+	(*InstanceInfo)(nil),             // 1: aserto.api.v2.InstanceInfo
+	(*InstanceRegistration)(nil),     // 2: aserto.api.v2.InstanceRegistration
+	(*Command)(nil),                  // 3: aserto.api.v2.Command
+	(*DiscoveryCommand)(nil),         // 4: aserto.api.v2.DiscoveryCommand
+	(*SyncEdgeDirectoryCommand)(nil), // 5: aserto.api.v2.SyncEdgeDirectoryCommand
 }
 var file_aserto_api_v2_management_proto_depIdxs = []int32{
-	0, // 0: aserto.api.v2.InstanceRegistration.info:type_name -> aserto.api.v2.InstanceInfo
-	3, // 1: aserto.api.v2.Command.discovery:type_name -> aserto.api.v2.DiscoveryCommand
-	4, // 2: aserto.api.v2.Command.sync_edge_directory:type_name -> aserto.api.v2.SyncEdgeDirectoryCommand
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 0: aserto.api.v2.InstanceRegistration.info:type_name -> aserto.api.v2.InstanceInfo
+	4, // 1: aserto.api.v2.Command.discovery:type_name -> aserto.api.v2.DiscoveryCommand
+	5, // 2: aserto.api.v2.Command.sync_edge_directory:type_name -> aserto.api.v2.SyncEdgeDirectoryCommand
+	0, // 3: aserto.api.v2.SyncEdgeDirectoryCommand.mode:type_name -> aserto.api.v2.SyncMode
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_aserto_api_v2_management_proto_init() }
@@ -479,13 +557,14 @@ func file_aserto_api_v2_management_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_aserto_api_v2_management_proto_rawDesc,
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_aserto_api_v2_management_proto_goTypes,
 		DependencyIndexes: file_aserto_api_v2_management_proto_depIdxs,
+		EnumInfos:         file_aserto_api_v2_management_proto_enumTypes,
 		MessageInfos:      file_aserto_api_v2_management_proto_msgTypes,
 	}.Build()
 	File_aserto_api_v2_management_proto = out.File
