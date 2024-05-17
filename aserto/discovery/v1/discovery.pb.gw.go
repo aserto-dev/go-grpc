@@ -32,7 +32,7 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 var (
-	filter_Discovery_OPADiscovery_0 = &utilities.DoubleArray{Encoding: map[string]int{"policy_id": 0, "policyId": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+	filter_Discovery_OPADiscovery_0 = &utilities.DoubleArray{Encoding: map[string]int{"policy_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_Discovery_OPADiscovery_0(ctx context.Context, marshaler runtime.Marshaler, client DiscoveryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {

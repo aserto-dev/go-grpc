@@ -68,7 +68,7 @@ func local_request_Registry_ListPublicOrgs_0(ctx context.Context, marshaler runt
 }
 
 var (
-	filter_Registry_ListPublicImages_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0}, Base: []int{1, 2, 0, 0}, Check: []int{0, 1, 2, 2}}
+	filter_Registry_ListPublicImages_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_Registry_ListPublicImages_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -192,7 +192,7 @@ func local_request_Registry_ListOrgs_0(ctx context.Context, marshaler runtime.Ma
 }
 
 var (
-	filter_Registry_RemoveImage_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "image": 1}, Base: []int{1, 2, 4, 0, 0, 0, 0}, Check: []int{0, 1, 1, 2, 2, 3, 3}}
+	filter_Registry_RemoveImage_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "image": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Registry_RemoveImage_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -285,11 +285,7 @@ func request_Registry_CreateImage_0(ctx context.Context, marshaler runtime.Marsh
 	var protoReq CreateImageRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -319,11 +315,7 @@ func local_request_Registry_CreateImage_0(ctx context.Context, marshaler runtime
 	var protoReq CreateImageRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -353,11 +345,7 @@ func request_Registry_SetImageVisibility_0(ctx context.Context, marshaler runtim
 	var protoReq SetImageVisibilityRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -397,11 +385,7 @@ func local_request_Registry_SetImageVisibility_0(ctx context.Context, marshaler 
 	var protoReq SetImageVisibilityRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -542,7 +526,7 @@ func local_request_Registry_GetWriteAccessToken_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_Registry_ListTagsWithDetails_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "repo": 1}, Base: []int{1, 2, 4, 0, 0, 0, 0}, Check: []int{0, 1, 1, 2, 2, 3, 3}}
+	filter_Registry_ListTagsWithDetails_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "repo": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Registry_ListTagsWithDetails_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -632,7 +616,7 @@ func local_request_Registry_ListTagsWithDetails_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_Registry_ListDigests_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "repo": 1}, Base: []int{1, 2, 4, 0, 0, 0, 0}, Check: []int{0, 1, 1, 2, 2, 3, 3}}
+	filter_Registry_ListDigests_0 = &utilities.DoubleArray{Encoding: map[string]int{"organization": 0, "repo": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Registry_ListDigests_0(ctx context.Context, marshaler runtime.Marshaler, client RegistryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {

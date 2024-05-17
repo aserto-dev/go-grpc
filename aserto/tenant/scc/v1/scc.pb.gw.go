@@ -251,11 +251,7 @@ func request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler runtime.M
 	var protoReq CreateRepoRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -295,11 +291,7 @@ func local_request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler run
 	var protoReq CreateRepoRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -336,7 +328,7 @@ func local_request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler run
 }
 
 var (
-	filter_SourceCodeCtl_ListTemplates_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0, "connectionId": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+	filter_SourceCodeCtl_ListTemplates_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
