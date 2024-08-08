@@ -167,6 +167,7 @@ func local_request_PolicyBuilder_DeletePolicyBuilder_0(ctx context.Context, mars
 // UnaryRPC     :call PolicyBuilderServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterPolicyBuilderHandlerFromEndpoint instead.
+// GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterPolicyBuilderHandlerServer(ctx context.Context, mux *runtime.ServeMux, server PolicyBuilderServer) error {
 
 	mux.Handle("GET", pattern_PolicyBuilder_ListPolicyBuilders_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
@@ -250,21 +251,21 @@ func RegisterPolicyBuilderHandlerServer(ctx context.Context, mux *runtime.ServeM
 // RegisterPolicyBuilderHandlerFromEndpoint is same as RegisterPolicyBuilderHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterPolicyBuilderHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, endpoint, opts...)
+	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		if err != nil {
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 			return
 		}
 		go func() {
 			<-ctx.Done()
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 		}()
 	}()
@@ -282,7 +283,7 @@ func RegisterPolicyBuilderHandler(ctx context.Context, mux *runtime.ServeMux, co
 // to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "PolicyBuilderClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "PolicyBuilderClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "PolicyBuilderClient" to call the correct interceptors.
+// "PolicyBuilderClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterPolicyBuilderHandlerClient(ctx context.Context, mux *runtime.ServeMux, client PolicyBuilderClient) error {
 
 	mux.Handle("GET", pattern_PolicyBuilder_ListPolicyBuilders_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
