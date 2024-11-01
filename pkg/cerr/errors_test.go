@@ -10,6 +10,11 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+var (
+	ErrBoom = errors.New("boom")
+	ErrPow  = errors.New("pow")
+)
+
 func TestDoubleCerr(t *testing.T) {
 	assert := require.New(t)
 
@@ -45,12 +50,12 @@ func TestWithEmptyMsg(t *testing.T) {
 func TestError(t *testing.T) {
 	assert := require.New(t)
 
-	err := cerr.ErrAccountNotFound.Msg("bla").Err(errors.New("boom"))
+	err := cerr.ErrAccountNotFound.Msg("bla").Err(ErrBoom)
 	err2 := cerr.ErrAccountNotFound.Msg("bla").Msg("ala")
-	err3 := cerr.ErrAccountNotFound.Err(errors.New("boom")).Msg("bla").Msg("ala")
-	err4 := cerr.ErrAccountNotFound.Err(errors.New("boom")).Err(errors.New("pow")).Msg("bla").Msg("ala")
-	err5 := cerr.ErrAccountNotFound.Err(errors.New("boom"))
-	err6 := cerr.ErrAccountNotFound.Err(errors.New("boom")).Err(errors.New("pow"))
+	err3 := cerr.ErrAccountNotFound.Err(ErrBoom).Msg("bla").Msg("ala")
+	err4 := cerr.ErrAccountNotFound.Err(ErrBoom).Err(ErrPow).Msg("bla").Msg("ala")
+	err5 := cerr.ErrAccountNotFound.Err(ErrBoom)
+	err6 := cerr.ErrAccountNotFound.Err(ErrBoom).Err(ErrPow)
 	err7 := cerr.ErrAccountNotFound.Msg("bla")
 
 	assert.Equal(err.Error(), "E10012 account not found: boom: bla")
