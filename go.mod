@@ -1,17 +1,17 @@
 module github.com/aserto-dev/go-grpc
 
-go 1.22
+go 1.22.10
 
-toolchain go1.23.2
+toolchain go1.23.4
 
 require (
-	github.com/aserto-dev/errors v0.0.11
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
-	github.com/stretchr/testify v1.9.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38
-	google.golang.org/grpc v1.67.1
-	google.golang.org/protobuf v1.35.1
+	github.com/aserto-dev/errors v0.0.12
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
+	github.com/stretchr/testify v1.10.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20241209162323-e6fa225c2576
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241216192217-9240e9c98484
+	google.golang.org/grpc v1.68.1
+	google.golang.org/protobuf v1.36.0
 )
 
 require (
@@ -21,8 +21,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
