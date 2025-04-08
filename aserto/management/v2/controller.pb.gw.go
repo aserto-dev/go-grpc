@@ -10,6 +10,7 @@ package management
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,21 +25,24 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_Controller_CommandStream_0(ctx context.Context, marshaler runtime.Marshaler, client ControllerClient, req *http.Request, pathParams map[string]string) (Controller_CommandStreamClient, runtime.ServerMetadata, error) {
-	var protoReq CommandStreamRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq CommandStreamRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	stream, err := client.CommandStream(ctx, &protoReq)
 	if err != nil {
 		return nil, metadata, err
@@ -49,7 +53,6 @@ func request_Controller_CommandStream_0(ctx context.Context, marshaler runtime.M
 	}
 	metadata.HeaderMD = header
 	return stream, metadata, nil
-
 }
 
 // RegisterControllerHandlerServer registers the http handlers for service Controller to "mux".
@@ -58,8 +61,7 @@ func request_Controller_CommandStream_0(ctx context.Context, marshaler runtime.M
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterControllerHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterControllerHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ControllerServer) error {
-
-	mux.Handle("POST", pattern_Controller_CommandStream_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_Controller_CommandStream_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -90,7 +92,6 @@ func RegisterControllerHandlerFromEndpoint(ctx context.Context, mux *runtime.Ser
 			}
 		}()
 	}()
-
 	return RegisterControllerHandler(ctx, mux, conn)
 }
 
@@ -106,14 +107,11 @@ func RegisterControllerHandler(ctx context.Context, mux *runtime.ServeMux, conn 
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "ControllerClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterControllerHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ControllerClient) error {
-
-	mux.Handle("POST", pattern_Controller_CommandStream_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_Controller_CommandStream_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.Controller/CommandStream", runtime.WithHTTPPathPattern("/aserto.management.v2.Controller/CommandStream"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.Controller/CommandStream", runtime.WithHTTPPathPattern("/aserto.management.v2.Controller/CommandStream"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -124,11 +122,8 @@ func RegisterControllerHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_Controller_CommandStream_0(annotatedContext, mux, outboundMarshaler, w, req, func() (proto.Message, error) { return resp.Recv() }, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 

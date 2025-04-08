@@ -146,7 +146,7 @@ var (
 	ErrDirectoryRelationTypeUnknown = newErr("E10064", codes.NotFound, http.StatusNotFound, "directory relation type unknown")
 	// Returned if permission is not defined in the directory.
 	ErrDirectoryPermissionUnknown = newErr("E10065", codes.NotFound, http.StatusNotFound, "directory permission unknown")
-	// Returned if object object id is not found in the directory.
+	// Returned if object id is not found in the directory.
 	ErrDirectoryObjectNotFound = newErr("E10066", codes.NotFound, http.StatusNotFound, "directory object not found")
 	// Returned if relation object is not found in the directory.
 	ErrDirectoryRelationNotFound = newErr("E10067", codes.NotFound, http.StatusNotFound, "directory relation not found")

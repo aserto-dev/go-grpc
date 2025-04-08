@@ -10,6 +10,7 @@ package registry_tenant
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,255 +25,206 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_PolicyRepo_GetPolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetPolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetPolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
-
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
-
 	msg, err := client.GetPolicyRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_GetPolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetPolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetPolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["id"]
+	val, ok := pathParams["id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
-
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
-
 	msg, err := server.GetPolicyRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
-var (
-	filter_PolicyRepo_ListPolicyRepos_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
+var filter_PolicyRepo_ListPolicyRepos_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
 func request_PolicyRepo_ListPolicyRepos_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListPolicyReposRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListPolicyReposRequest
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_PolicyRepo_ListPolicyRepos_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := client.ListPolicyRepos(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_ListPolicyRepos_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListPolicyReposRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListPolicyReposRequest
+		metadata runtime.ServerMetadata
+	)
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_PolicyRepo_ListPolicyRepos_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := server.ListPolicyRepos(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_PolicyRepo_ListPublicPolicyRepos_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListPublicPolicyReposRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListPublicPolicyReposRequest
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
 	msg, err := client.ListPublicPolicyRepos(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_ListPublicPolicyRepos_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListPublicPolicyReposRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListPublicPolicyReposRequest
+		metadata runtime.ServerMetadata
+	)
 	msg, err := server.ListPublicPolicyRepos(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_PolicyRepo_CreatePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreatePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && err != io.EOF {
+	var (
+		protoReq CreatePolicyRepoRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := client.CreatePolicyRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_CreatePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreatePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && err != io.EOF {
+	var (
+		protoReq CreatePolicyRepoRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := server.CreatePolicyRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_PolicyRepo_DeletePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeletePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq DeletePolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
-
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
-
 	msg, err := client.DeletePolicyRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_DeletePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeletePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq DeletePolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["id"]
+	val, ok := pathParams["id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
-
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
-
 	msg, err := server.DeletePolicyRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_PolicyRepo_UpdatePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, client PolicyRepoClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdatePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && err != io.EOF {
+	var (
+		protoReq UpdatePolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_repo.id"]
+	val, ok := pathParams["policy_repo.id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_repo.id")
 	}
-
 	err = runtime.PopulateFieldFromPath(&protoReq, "policy_repo.id", val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_repo.id", err)
 	}
-
 	msg, err := client.UpdatePolicyRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_PolicyRepo_UpdatePolicyRepo_0(ctx context.Context, marshaler runtime.Marshaler, server PolicyRepoServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdatePolicyRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && err != io.EOF {
+	var (
+		protoReq UpdatePolicyRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.PolicyRepo); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["policy_repo.id"]
+	val, ok := pathParams["policy_repo.id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_repo.id")
 	}
-
 	err = runtime.PopulateFieldFromPath(&protoReq, "policy_repo.id", val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_repo.id", err)
 	}
-
 	msg, err := server.UpdatePolicyRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 // RegisterPolicyRepoHandlerServer registers the http handlers for service PolicyRepo to "mux".
@@ -281,16 +233,13 @@ func local_request_PolicyRepo_UpdatePolicyRepo_0(ctx context.Context, marshaler 
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterPolicyRepoHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux, server PolicyRepoServer) error {
-
-	mux.Handle("GET", pattern_PolicyRepo_GetPolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_GetPolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/GetPolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/GetPolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -302,20 +251,15 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_GetPolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_PolicyRepo_ListPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_ListPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -327,20 +271,15 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_ListPolicyRepos_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_PolicyRepo_ListPublicPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_ListPublicPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPublicPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/public"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPublicPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/public"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -352,20 +291,15 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_ListPublicPolicyRepos_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_PolicyRepo_CreatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_PolicyRepo_CreatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/CreatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/CreatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -377,20 +311,15 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_CreatePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("DELETE", pattern_PolicyRepo_DeletePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_PolicyRepo_DeletePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/DeletePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/DeletePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -402,20 +331,15 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_DeletePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("PATCH", pattern_PolicyRepo_UpdatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPatch, pattern_PolicyRepo_UpdatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/UpdatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{policy_repo.id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/UpdatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{policy_repo.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -427,9 +351,7 @@ func RegisterPolicyRepoHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_UpdatePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
 
 	return nil
@@ -456,7 +378,6 @@ func RegisterPolicyRepoHandlerFromEndpoint(ctx context.Context, mux *runtime.Ser
 			}
 		}()
 	}()
-
 	return RegisterPolicyRepoHandler(ctx, mux, conn)
 }
 
@@ -472,14 +393,11 @@ func RegisterPolicyRepoHandler(ctx context.Context, mux *runtime.ServeMux, conn 
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "PolicyRepoClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux, client PolicyRepoClient) error {
-
-	mux.Handle("GET", pattern_PolicyRepo_GetPolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_GetPolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/GetPolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/GetPolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -490,18 +408,13 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_GetPolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_PolicyRepo_ListPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_ListPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -512,18 +425,13 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_ListPolicyRepos_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_PolicyRepo_ListPublicPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_PolicyRepo_ListPublicPolicyRepos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPublicPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/public"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/ListPublicPolicyRepos", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/public"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -534,18 +442,13 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_ListPublicPolicyRepos_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_PolicyRepo_CreatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_PolicyRepo_CreatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/CreatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/CreatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -556,18 +459,13 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_CreatePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("DELETE", pattern_PolicyRepo_DeletePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_PolicyRepo_DeletePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/DeletePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/DeletePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -578,18 +476,13 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_DeletePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("PATCH", pattern_PolicyRepo_UpdatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPatch, pattern_PolicyRepo_UpdatePolicyRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/UpdatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{policy_repo.id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.registry_tenant.v1.PolicyRepo/UpdatePolicyRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/repos/{policy_repo.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -600,38 +493,25 @@ func RegisterPolicyRepoHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_PolicyRepo_UpdatePolicyRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 
 var (
-	pattern_PolicyRepo_GetPolicyRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "id"}, ""))
-
-	pattern_PolicyRepo_ListPolicyRepos_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "repos"}, ""))
-
+	pattern_PolicyRepo_GetPolicyRepo_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "id"}, ""))
+	pattern_PolicyRepo_ListPolicyRepos_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "repos"}, ""))
 	pattern_PolicyRepo_ListPublicPolicyRepos_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"api", "v1", "tenant", "repos", "public"}, ""))
-
-	pattern_PolicyRepo_CreatePolicyRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "repos"}, ""))
-
-	pattern_PolicyRepo_DeletePolicyRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "id"}, ""))
-
-	pattern_PolicyRepo_UpdatePolicyRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "policy_repo.id"}, ""))
+	pattern_PolicyRepo_CreatePolicyRepo_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "tenant", "repos"}, ""))
+	pattern_PolicyRepo_DeletePolicyRepo_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "id"}, ""))
+	pattern_PolicyRepo_UpdatePolicyRepo_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "tenant", "repos", "policy_repo.id"}, ""))
 )
 
 var (
-	forward_PolicyRepo_GetPolicyRepo_0 = runtime.ForwardResponseMessage
-
-	forward_PolicyRepo_ListPolicyRepos_0 = runtime.ForwardResponseMessage
-
+	forward_PolicyRepo_GetPolicyRepo_0         = runtime.ForwardResponseMessage
+	forward_PolicyRepo_ListPolicyRepos_0       = runtime.ForwardResponseMessage
 	forward_PolicyRepo_ListPublicPolicyRepos_0 = runtime.ForwardResponseMessage
-
-	forward_PolicyRepo_CreatePolicyRepo_0 = runtime.ForwardResponseMessage
-
-	forward_PolicyRepo_DeletePolicyRepo_0 = runtime.ForwardResponseMessage
-
-	forward_PolicyRepo_UpdatePolicyRepo_0 = runtime.ForwardResponseMessage
+	forward_PolicyRepo_CreatePolicyRepo_0      = runtime.ForwardResponseMessage
+	forward_PolicyRepo_DeletePolicyRepo_0      = runtime.ForwardResponseMessage
+	forward_PolicyRepo_UpdatePolicyRepo_0      = runtime.ForwardResponseMessage
 )
