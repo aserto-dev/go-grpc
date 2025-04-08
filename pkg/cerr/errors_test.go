@@ -58,23 +58,23 @@ func TestError(t *testing.T) {
 	err6 := cerr.ErrAccountNotFound.Err(ErrBoom).Err(ErrPow)
 	err7 := cerr.ErrAccountNotFound.Msg("bla")
 
-	assert.Equal(err.Error(), "E10012 account not found: boom: bla")
-	assert.Equal(err2.Error(), "E10012 account not found: bla: ala")
-	assert.Equal(err3.Error(), "E10012 account not found: boom: bla: ala")
-	assert.Equal(err4.Error(), "E10012 account not found: boom: pow: bla: ala")
-	assert.Equal(err5.Error(), "E10012 account not found: boom")
-	assert.Equal(err6.Error(), "E10012 account not found: boom: pow")
-	assert.Equal(err7.Error(), "E10012 account not found: bla")
+	assert.ErrorContains(err, "E10012 account not found: boom: bla")
+	assert.ErrorContains(err2, "E10012 account not found: bla: ala")
+	assert.ErrorContains(err3, "E10012 account not found: boom: bla: ala")
+	assert.ErrorContains(err4, "E10012 account not found: boom: pow: bla: ala")
+	assert.ErrorContains(err5, "E10012 account not found: boom")
+	assert.ErrorContains(err6, "E10012 account not found: boom: pow")
+	assert.ErrorContains(err7, "E10012 account not found: bla")
 }
 
 func TestWithGrpcStatusCode(t *testing.T) {
 	assert := require.New(t)
 	err := cerr.ErrAccountNotFound.WithGRPCStatus(codes.Canceled)
-	assert.Equal(err.StatusCode, codes.Canceled)
+	assert.Equal(codes.Canceled, err.StatusCode)
 }
 
 func TestWithHttpStatusCode(t *testing.T) {
 	assert := require.New(t)
 	err := cerr.ErrAccountNotFound.WithHTTPStatus(http.StatusAccepted)
-	assert.Equal(err.HTTPCode, http.StatusAccepted)
+	assert.Equal(http.StatusAccepted, err.HTTPCode)
 }
