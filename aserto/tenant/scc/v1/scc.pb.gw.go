@@ -10,6 +10,7 @@ package scc
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,521 +25,388 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_SourceCodeCtl_ListOrg_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListOrgRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListOrgRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	msg, err := client.ListOrg(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_ListOrg_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListOrgRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListOrgRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	msg, err := server.ListOrg(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_SourceCodeCtl_ListRepo_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	msg, err := client.ListRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_ListRepo_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	msg, err := server.ListRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_SourceCodeCtl_GetRepo_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	val, ok = pathParams["name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
 	}
-
 	protoReq.Name, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
-
 	msg, err := client.GetRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_GetRepo_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetRepoRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	val, ok = pathParams["name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
 	}
-
 	protoReq.Name, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
-
 	msg, err := server.GetRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq CreateRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	msg, err := client.CreateRepo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_CreateRepo_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateRepoRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq CreateRepoRequest
+		metadata runtime.ServerMetadata
+		err      error
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	msg, err := server.CreateRepo(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
-var (
-	filter_SourceCodeCtl_ListTemplates_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
-)
+var filter_SourceCodeCtl_ListTemplates_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 
 func request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListTemplatesRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListTemplatesRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SourceCodeCtl_ListTemplates_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := client.ListTemplates(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_ListTemplates_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListTemplatesRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListTemplatesRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SourceCodeCtl_ListTemplates_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := server.ListTemplates(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_SourceCodeCtl_GetProfile_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetProfileRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetProfileRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	msg, err := client.GetProfile(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_GetProfile_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetProfileRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq GetProfileRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	msg, err := server.GetProfile(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_SourceCodeCtl_IsRepoConnected_0(ctx context.Context, marshaler runtime.Marshaler, client SourceCodeCtlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq IsRepoConnectedRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq IsRepoConnectedRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	val, ok = pathParams["repo"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repo")
 	}
-
 	protoReq.Repo, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repo", err)
 	}
-
 	msg, err := client.IsRepoConnected(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_SourceCodeCtl_IsRepoConnected_0(ctx context.Context, marshaler runtime.Marshaler, server SourceCodeCtlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq IsRepoConnectedRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq IsRepoConnectedRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["connection_id"]
+	val, ok := pathParams["connection_id"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
 	}
-
 	protoReq.ConnectionId, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
 	}
-
 	val, ok = pathParams["org"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "org")
 	}
-
 	protoReq.Org, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "org", err)
 	}
-
 	val, ok = pathParams["repo"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "repo")
 	}
-
 	protoReq.Repo, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "repo", err)
 	}
-
 	msg, err := server.IsRepoConnected(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 // RegisterSourceCodeCtlHandlerServer registers the http handlers for service SourceCodeCtl to "mux".
@@ -547,16 +415,13 @@ func local_request_SourceCodeCtl_IsRepoConnected_0(ctx context.Context, marshale
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSourceCodeCtlHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeMux, server SourceCodeCtlServer) error {
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListOrg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListOrg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListOrg", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/orgs"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListOrg", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/orgs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -568,20 +433,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListOrg_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -593,20 +453,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -618,20 +473,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_GetRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -643,20 +493,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_CreateRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListTemplates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListTemplates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListTemplates", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/templates"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListTemplates", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/templates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -668,20 +513,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListTemplates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_GetProfile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_GetProfile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetProfile", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/profile"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetProfile", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/profile"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -693,20 +533,15 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_GetProfile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_IsRepoConnected_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_IsRepoConnected_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -718,9 +553,7 @@ func RegisterSourceCodeCtlHandlerServer(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_IsRepoConnected_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
 
 	return nil
@@ -747,7 +580,6 @@ func RegisterSourceCodeCtlHandlerFromEndpoint(ctx context.Context, mux *runtime.
 			}
 		}()
 	}()
-
 	return RegisterSourceCodeCtlHandler(ctx, mux, conn)
 }
 
@@ -763,14 +595,11 @@ func RegisterSourceCodeCtlHandler(ctx context.Context, mux *runtime.ServeMux, co
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "SourceCodeCtlClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeMux, client SourceCodeCtlClient) error {
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListOrg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListOrg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListOrg", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/orgs"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListOrg", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/orgs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -781,18 +610,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListOrg_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -803,18 +627,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_GetRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -825,18 +644,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_GetRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_SourceCodeCtl_CreateRepo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/CreateRepo", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -847,18 +661,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_CreateRepo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_ListTemplates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_ListTemplates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListTemplates", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/templates"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/ListTemplates", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/templates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -869,18 +678,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_ListTemplates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_GetProfile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_GetProfile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetProfile", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/profile"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/GetProfile", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/profile"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -891,18 +695,13 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_GetProfile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_SourceCodeCtl_IsRepoConnected_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_SourceCodeCtl_IsRepoConnected_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.tenant.scc.v1.SourceCodeCtl/IsRepoConnected", runtime.WithHTTPPathPattern("/api/v1/tenant/scc/{connection_id}/repos/{org}/{repo}/connected"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -913,42 +712,27 @@ func RegisterSourceCodeCtlHandlerClient(ctx context.Context, mux *runtime.ServeM
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_SourceCodeCtl_IsRepoConnected_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 
 var (
-	pattern_SourceCodeCtl_ListOrg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "orgs"}, ""))
-
-	pattern_SourceCodeCtl_ListRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
-
-	pattern_SourceCodeCtl_GetRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org", "name"}, ""))
-
-	pattern_SourceCodeCtl_CreateRepo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
-
-	pattern_SourceCodeCtl_ListTemplates_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "templates"}, ""))
-
-	pattern_SourceCodeCtl_GetProfile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "profile"}, ""))
-
+	pattern_SourceCodeCtl_ListOrg_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "orgs"}, ""))
+	pattern_SourceCodeCtl_ListRepo_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
+	pattern_SourceCodeCtl_GetRepo_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org", "name"}, ""))
+	pattern_SourceCodeCtl_CreateRepo_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org"}, ""))
+	pattern_SourceCodeCtl_ListTemplates_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "templates"}, ""))
+	pattern_SourceCodeCtl_GetProfile_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "tenant", "scc", "connection_id", "profile"}, ""))
 	pattern_SourceCodeCtl_IsRepoConnected_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7, 2, 8}, []string{"api", "v1", "tenant", "scc", "connection_id", "repos", "org", "repo", "connected"}, ""))
 )
 
 var (
-	forward_SourceCodeCtl_ListOrg_0 = runtime.ForwardResponseMessage
-
-	forward_SourceCodeCtl_ListRepo_0 = runtime.ForwardResponseMessage
-
-	forward_SourceCodeCtl_GetRepo_0 = runtime.ForwardResponseMessage
-
-	forward_SourceCodeCtl_CreateRepo_0 = runtime.ForwardResponseMessage
-
-	forward_SourceCodeCtl_ListTemplates_0 = runtime.ForwardResponseMessage
-
-	forward_SourceCodeCtl_GetProfile_0 = runtime.ForwardResponseMessage
-
+	forward_SourceCodeCtl_ListOrg_0         = runtime.ForwardResponseMessage
+	forward_SourceCodeCtl_ListRepo_0        = runtime.ForwardResponseMessage
+	forward_SourceCodeCtl_GetRepo_0         = runtime.ForwardResponseMessage
+	forward_SourceCodeCtl_CreateRepo_0      = runtime.ForwardResponseMessage
+	forward_SourceCodeCtl_ListTemplates_0   = runtime.ForwardResponseMessage
+	forward_SourceCodeCtl_GetProfile_0      = runtime.ForwardResponseMessage
 	forward_SourceCodeCtl_IsRepoConnected_0 = runtime.ForwardResponseMessage
 )

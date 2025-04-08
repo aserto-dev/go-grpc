@@ -10,6 +10,7 @@ package discovery
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,83 +25,67 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_Discovery_OPAInstanceDiscovery_0(ctx context.Context, marshaler runtime.Marshaler, client DiscoveryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq OPAInstanceDiscoveryRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq OPAInstanceDiscoveryRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["policy_name"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["policy_name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_name")
 	}
-
 	protoReq.PolicyName, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_name", err)
 	}
-
 	val, ok = pathParams["instance_label"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "instance_label")
 	}
-
 	protoReq.InstanceLabel, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "instance_label", err)
 	}
-
 	msg, err := client.OPAInstanceDiscovery(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_Discovery_OPAInstanceDiscovery_0(ctx context.Context, marshaler runtime.Marshaler, server DiscoveryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq OPAInstanceDiscoveryRequest
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq OPAInstanceDiscoveryRequest
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["policy_name"]
+	val, ok := pathParams["policy_name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "policy_name")
 	}
-
 	protoReq.PolicyName, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "policy_name", err)
 	}
-
 	val, ok = pathParams["instance_label"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "instance_label")
 	}
-
 	protoReq.InstanceLabel, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "instance_label", err)
 	}
-
 	msg, err := server.OPAInstanceDiscovery(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 // RegisterDiscoveryHandlerServer registers the http handlers for service Discovery to "mux".
@@ -109,16 +94,13 @@ func local_request_Discovery_OPAInstanceDiscovery_0(ctx context.Context, marshal
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterDiscoveryHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterDiscoveryHandlerServer(ctx context.Context, mux *runtime.ServeMux, server DiscoveryServer) error {
-
-	mux.Handle("GET", pattern_Discovery_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_Discovery_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.discovery.policy.v2.Discovery/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v2/discovery/{policy_name}/{instance_label}/opa"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.discovery.policy.v2.Discovery/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v2/discovery/{policy_name}/{instance_label}/opa"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -130,9 +112,7 @@ func RegisterDiscoveryHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_Discovery_OPAInstanceDiscovery_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
 
 	return nil
@@ -159,7 +139,6 @@ func RegisterDiscoveryHandlerFromEndpoint(ctx context.Context, mux *runtime.Serv
 			}
 		}()
 	}()
-
 	return RegisterDiscoveryHandler(ctx, mux, conn)
 }
 
@@ -175,14 +154,11 @@ func RegisterDiscoveryHandler(ctx context.Context, mux *runtime.ServeMux, conn *
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "DiscoveryClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterDiscoveryHandlerClient(ctx context.Context, mux *runtime.ServeMux, client DiscoveryClient) error {
-
-	mux.Handle("GET", pattern_Discovery_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_Discovery_OPAInstanceDiscovery_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.discovery.policy.v2.Discovery/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v2/discovery/{policy_name}/{instance_label}/opa"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.discovery.policy.v2.Discovery/OPAInstanceDiscovery", runtime.WithHTTPPathPattern("/api/v2/discovery/{policy_name}/{instance_label}/opa"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -193,11 +169,8 @@ func RegisterDiscoveryHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_Discovery_OPAInstanceDiscovery_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 

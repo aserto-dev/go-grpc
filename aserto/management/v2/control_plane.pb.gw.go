@@ -10,6 +10,7 @@ package management
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,55 +25,57 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_ControlPlane_ListInstanceRegistrations_0(ctx context.Context, marshaler runtime.Marshaler, client ControlPlaneClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListInstanceRegistrationsRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListInstanceRegistrationsRequest
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
 	msg, err := client.ListInstanceRegistrations(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_ControlPlane_ListInstanceRegistrations_0(ctx context.Context, marshaler runtime.Marshaler, server ControlPlaneServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListInstanceRegistrationsRequest
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq ListInstanceRegistrationsRequest
+		metadata runtime.ServerMetadata
+	)
 	msg, err := server.ListInstanceRegistrations(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_ControlPlane_ExecCommand_0(ctx context.Context, marshaler runtime.Marshaler, client ControlPlaneClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ExecCommandRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq ExecCommandRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := client.ExecCommand(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_ControlPlane_ExecCommand_0(ctx context.Context, marshaler runtime.Marshaler, server ControlPlaneServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ExecCommandRequest
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq ExecCommandRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := server.ExecCommand(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 // RegisterControlPlaneHandlerServer registers the http handlers for service ControlPlane to "mux".
@@ -81,16 +84,13 @@ func local_request_ControlPlane_ExecCommand_0(ctx context.Context, marshaler run
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterControlPlaneHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterControlPlaneHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ControlPlaneServer) error {
-
-	mux.Handle("GET", pattern_ControlPlane_ListInstanceRegistrations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_ControlPlane_ListInstanceRegistrations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ListInstanceRegistrations", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/instance_registrations"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ListInstanceRegistrations", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/instance_registrations"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -102,20 +102,15 @@ func RegisterControlPlaneHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_ControlPlane_ListInstanceRegistrations_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_ControlPlane_ExecCommand_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_ControlPlane_ExecCommand_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ExecCommand", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/exec"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ExecCommand", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/exec"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -127,9 +122,7 @@ func RegisterControlPlaneHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_ControlPlane_ExecCommand_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
 
 	return nil
@@ -156,7 +149,6 @@ func RegisterControlPlaneHandlerFromEndpoint(ctx context.Context, mux *runtime.S
 			}
 		}()
 	}()
-
 	return RegisterControlPlaneHandler(ctx, mux, conn)
 }
 
@@ -172,14 +164,11 @@ func RegisterControlPlaneHandler(ctx context.Context, mux *runtime.ServeMux, con
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "ControlPlaneClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterControlPlaneHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ControlPlaneClient) error {
-
-	mux.Handle("GET", pattern_ControlPlane_ListInstanceRegistrations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_ControlPlane_ListInstanceRegistrations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ListInstanceRegistrations", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/instance_registrations"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ListInstanceRegistrations", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/instance_registrations"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -190,18 +179,13 @@ func RegisterControlPlaneHandlerClient(ctx context.Context, mux *runtime.ServeMu
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_ControlPlane_ListInstanceRegistrations_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_ControlPlane_ExecCommand_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_ControlPlane_ExecCommand_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ExecCommand", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/exec"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/aserto.management.v2.ControlPlane/ExecCommand", runtime.WithHTTPPathPattern("/api/v2/management/control_plane/exec"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -212,22 +196,17 @@ func RegisterControlPlaneHandlerClient(ctx context.Context, mux *runtime.ServeMu
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_ControlPlane_ExecCommand_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 
 var (
 	pattern_ControlPlane_ListInstanceRegistrations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"api", "v2", "management", "control_plane", "instance_registrations"}, ""))
-
-	pattern_ControlPlane_ExecCommand_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"api", "v2", "management", "control_plane", "exec"}, ""))
+	pattern_ControlPlane_ExecCommand_0               = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"api", "v2", "management", "control_plane", "exec"}, ""))
 )
 
 var (
 	forward_ControlPlane_ListInstanceRegistrations_0 = runtime.ForwardResponseMessage
-
-	forward_ControlPlane_ExecCommand_0 = runtime.ForwardResponseMessage
+	forward_ControlPlane_ExecCommand_0               = runtime.ForwardResponseMessage
 )
