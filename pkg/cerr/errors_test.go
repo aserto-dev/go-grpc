@@ -58,10 +58,10 @@ func TestError(t *testing.T) {
 	err6 := cerr.ErrAccountNotFound.Err(ErrBoom).Err(ErrPow)
 	err7 := cerr.ErrAccountNotFound.Msg("bla")
 
-	assert.ErrorContains(err, "E10012 account not found: boom: bla")
+	assert.ErrorContains(err, "E10012 account not found: bla: boom")
 	assert.ErrorContains(err2, "E10012 account not found: bla: ala")
-	assert.ErrorContains(err3, "E10012 account not found: boom: bla: ala")
-	assert.ErrorContains(err4, "E10012 account not found: boom: pow: bla: ala")
+	assert.ErrorContains(err3, "E10012 account not found: bla: ala: boom")
+	assert.ErrorContains(err4, "E10012 account not found: bla: ala: boom: pow")
 	assert.ErrorContains(err5, "E10012 account not found: boom")
 	assert.ErrorContains(err6, "E10012 account not found: boom: pow")
 	assert.ErrorContains(err7, "E10012 account not found: bla")
